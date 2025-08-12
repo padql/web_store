@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>QudalauttHub - Store</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    body {
+      font-family: poppins, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #ffffff;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.6rem;
+      color: #1e877c;
+      text-align: center;
+    }
+
+    .container {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    /* Pas di layar kecil (mobile), paksa 2 kolom */
+    @media (max-width: 600px) {
+      .container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .card {
+      background: rgba(126, 148, 161, 0.2); /* putih transparan */
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(2px); /* efek blur kaca */
+      -webkit-backdrop-filter: blur(12px); /* Safari support */
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+      background: rgba(197, 252, 241, 0.3);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    }
+
+    .card-header {
+      position: relative;
+      width: 100%;
+      height: 180px;
+      overflow: hidden;
+    }
+
+    .card-header img {
+      width: 100%;
+      height: 180px; /* Atur tinggi sesuai kebutuhan */
+      object-fit: contain; /* Biar gambar gak ketarik */
+      /* background-color: #fff;  */
+      border-radius: 8px; /* Kalau mau rounded */
+      padding: 10px; /* Biar ada jarak */
+      box-sizing: border-box;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #2c3e50;
+      padding: 10px 16px;
+    }
+
+    /* Modal Style */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .modal {
+        padding: 1px;
+      }
+    }
+
+    .modal-content {
+      background: #fff;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 100%;
+      padding: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      animation: fadeIn 0.3s ease;
+    }
+
+     @media (max-width: 600px) {
+      .modal-content {
+        width: 70%;
+      }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h2 {
+      font-size: 1.4rem;
+      color: #1e877c;
+      margin: 0;
+    }
+
+    .close {
+      font-size: 1.5rem;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: #999;
+    }
+
+    .close:hover {
+      color: #333;
+    }
+
+    .modal-body {
+      margin-top: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    select, button {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 0.95rem;
+    }
+
+    button {
+      background: #1e877c;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: #1b7b72;
+    }
+
+    .harga {
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: #e67e22;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #modalCat {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1.5px solid #1e877c;
+      font-size: 1rem;
+      color: #1e877c;
+      background-color: #f9fff9;
+      cursor: pointer;
+      transition: border-color 0.3s ease;
+      appearance: none; /* Buat ilangin default arrow di beberapa browser */
+      background-image: url('data:image/svg+xml;utf8,<svg fill="%2327ae60" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 16px;
+    }
+
+    #modalCat:focus {
+      border-color: #1b7b72;
+      outline: none;
+      box-shadow: 0 0 5px #1b7b72;
+    }
+
+    #modalDur {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1.5px solid #1e877c;
+      font-size: 1rem;
+      color: #1e877c;
+      background-color: #f9fff9;
+      cursor: pointer;
+      transition: border-color 0.3s ease;
+      appearance: none; /* Buat ilangin default arrow di beberapa browser */
+      background-image: url('data:image/svg+xml;utf8,<svg fill="%2327ae60" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 16px;
+    }
+
+    #modalDur:focus {
+      border-color: #1e877c;
+      outline: none;
+      box-shadow: 0 0 5px #1e8087;
+    }
+
+    footer {
+  background: #27aeae;
+  color: white;
+  padding: 20px 0;
+  margin-top: 40px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #8ad8ce;
+  text-decoration: underline;
+}
+
+/* Responsive: di layar kecil, link di bawah teks */
+@media (max-width: 600px) {
+  .footer-container {
+    flex-direction: column;
+    font-size: 0.85rem;
+  }
+  .footer-links {
+    justify-content: center;
+  }
+}
+
+canvas#doodleBg {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;       /* biar di belakang konten */
+  pointer-events: none; /* gak ganggu klik/touch */
+  background: transparent;
+}
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1>QudalauttHub</h1>
+  </header>
+
+  <div id="products" class="container"></div>
+
+  <!-- Modal -->
+  <div id="productModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle"></h2>
+        <button id="closeModal" class="close">&times;</button>
+      </div>
+      <p style="text-align: left;" id="modalDesc"></p>
+      <div class="modal-body">
+        <select id="modalCat"></select>
+        <select id="modalDur"></select>
+        <div style="color: #333; margin-bottom: 5%; margin-top: 5%; text-align: center;" id="modalHarga" class="harga">Pilih kategori & durasi</div>
+        <button id="modalBuyBtn">Cek Stok</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+    const SUPABASE_URL = 'https://uagbiwhyapkrxkyyjeza.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhZ2Jpd2h5YXBrcnhreXlqZXphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0NDUyNjcsImV4cCI6MjA2OTAyMTI2N30.k6dR0RL0yfElQC5wWKC2ab5npBSiLwaCecxq6j2fdWE';
+    const WA_NUMBER = '6285722444031';
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+    const modal = document.getElementById('productModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalCat = document.getElementById('modalCat');
+    const modalDur = document.getElementById('modalDur');
+    const modalHarga = document.getElementById('modalHarga');
+    const modalBuyBtn = document.getElementById('modalBuyBtn');
+    const closeModal = document.getElementById('closeModal');
+
+    closeModal.onclick = () => modal.style.display = 'none';
+    window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+
+    async function load() {
+  const { data, error } = await supabase
+    .from('products')
+    .select('*')
+    .order('nama_produk', { ascending: true });
+
+  if (error) {
+    console.error(error);
+    document.getElementById('products').innerText = 'Gagal memuat produk';
+    return;
+  }
+
+  // Mapping gambar
+  const productImages = {
+    'Alight Motion': '../images/am.png',
+    'Bstation': '../images/bs.png',
+    'Capcut': '../images/cc.png',
+    'Canva': '../images/c.png',
+    'Netflix': '../images/n.png',
+    'Spotify': '../images/s.png',
+    'YouTube': '../images/yt.png',
+    'ChatGPT': '../images/gpt.png',
+    'iQIYI': '../images/iq.png',
+    'Vidio': '../images/vid.png'
+  };
+
+  // Kelompokkan data
+  const grouped = {};
+  data.forEach(p => {
+    if (!grouped[p.nama_produk]) grouped[p.nama_produk] = [];
+    grouped[p.nama_produk].push(p);
+  });
+
+  const container = document.getElementById('products');
+  container.innerHTML = '';
+
+  Object.keys(grouped).forEach(nama_produk => {
+    const group = grouped[nama_produk];
+
+    // Card
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    // Header (gambar)
+    const header = document.createElement('div');
+    header.className = 'card-header';
+    header.innerHTML = `
+      <img 
+        src="${productImages[nama_produk] || 'https://via.placeholder.com/300x180'}" 
+        alt="${nama_produk}">
+    `;
+
+    // Title
+    const title = document.createElement('div');
+    title.className = 'card-title';
+    title.textContent = nama_produk;
+
+    // Klik buka modal
+    header.addEventListener('click', () => {
+      modal.style.display = 'flex';
+      modalTitle.textContent = nama_produk;
+      modalDesc.textContent = group[0].description || 'Silakan pilih kategori dan durasi untuk melihat harga. Anda akan dialihkan ke WhatsApp untuk menanyakan ketersediaan stok dan melakukan pembelian.';
+
+      // Filter kategori unik
+      const cats = [...new Set(group.map(x => x.kategori))];
+        modalCat.innerHTML = `<option value="" selected disabled>Pilih kategori</option>` + 
+          cats.map(c => `<option value="${c}">${c}</option>`).join('');
+
+      function updateDurasi() {
+        const cat = modalCat.value;
+        const durasi = group
+          .filter(x => x.kategori === cat)
+          .map(x => x.device ? `${x.durasi} (${x.device})` : x.durasi);
+
+        modalDur.innerHTML = `<option value="" selected disabled>Pilih durasi</option>` + 
+          durasi.map(d => `<option value="${d}">${d}</option>`).join('');
+
+        updateHarga();
+      }
+
+      function updateHarga() {
+        const cat = modalCat.value;
+        const dur = modalDur.value;
+        const item = group.find(x =>
+          x.kategori === cat &&
+          (x.device ? `${x.durasi} (${x.device})` : x.durasi) === dur
+        );
+        if (item) modalHarga.textContent = 'Rp ' + Number(item.harga).toLocaleString('id-ID');
+        else modalHarga.textContent = 'Pilih kategori & durasi';
+      }
+
+      modalCat.onchange = updateDurasi;
+      modalDur.onchange = updateHarga;
+
+      modalBuyBtn.onclick = () => {
+        const cat = modalCat.value;
+        const dur = modalDur.value;
+        const item = group.find(x =>
+          x.kategori === cat &&
+          (x.device ? `${x.durasi} (${x.device})` : x.durasi) === dur
+        );
+        if (!item) return alert('Pilih opsi dulu');
+        const message = `Halo kak, saya mau pesan:\nProduk: ${item.nama_produk}\nKategori: ${item.kategori}\nDurasi: ${item.durasi}\nHarga: Rp ${Number(item.harga).toLocaleString('id-ID')} apakah stock masih ada?`;
+        window.open(`https://wa.me/6285722444031?text=${encodeURIComponent(message)}`, '_blank');
+      };
+
+      updateDurasi();
+    });
+
+    card.appendChild(header);
+    card.appendChild(title);
+    container.appendChild(card);
+  });
+}
+
+
+    load();
+    const canvas = document.getElementById('doodleBg');
+const ctx = canvas.getContext('2d');
+
+let doodles = [];
+const count = 60;
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+function createDoodles() {
+  doodles = [];
+  for(let i = 0; i < count; i++) {
+    doodles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: 5 + Math.random() * 12,
+      vx: (Math.random() - 0.5) * 0.3, // kecepatan horizontal pelan
+      vy: (Math.random() - 0.5) * 0.3, // kecepatan vertikal pelan
+      type: Math.random() < 0.5 ? 'circle' : 'cross',
+      opacity: 0.8 + Math.random() * 0.3
+    });
+  }
+}
+
+function drawDoodle(d) {
+  ctx.strokeStyle = `rgba(163, 217, 165, ${d.opacity})`;
+  ctx.lineWidth = 1;
+
+  if (d.type === 'circle') {
+    ctx.beginPath();
+    ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+    ctx.stroke();
+  } else {
+    ctx.beginPath();
+    ctx.moveTo(d.x - d.r, d.y - d.r);
+    ctx.lineTo(d.x + d.r, d.y + d.r);
+    ctx.moveTo(d.x + d.r, d.y - d.r);
+    ctx.lineTo(d.x - d.r, d.y + d.r);
+    ctx.stroke();
+  }
+}
+
+function update() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  doodles.forEach(d => {
+    d.x += d.vx;
+    d.y += d.vy;
+
+    // kalau nyampe tepi, pantulkan
+    if (d.x < 0 || d.x > canvas.width) d.vx *= -1;
+    if (d.y < 0 || d.y > canvas.height) d.vy *= -1;
+
+    drawDoodle(d);
+  });
+
+  requestAnimationFrame(update);
+}
+
+function initDoodle() {
+  resize();
+  createDoodles();
+  update();
+}
+
+window.addEventListener('resize', () => {
+  resize();
+  createDoodles();
+});
+
+initDoodle();
+
+
+  </script>
+  <footer>
+  <div class="footer-container">
+    <p>&copy; 2025 QudalauttHub. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="https://www.instagram.com/qudalautt.hub?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="><i class="fa-brands fa-instagram"></i></a>
+      <a href="https://wa.me/6285722444031"><i class="fa-brands fa-whatsapp"></i></a>
+      <a href="qudalautthub.vercel.app"><i class="fa-solid fa-earth-asia"></i></a>
+    </div>
+  </div>
+</footer>
+<canvas id="doodleBg"></canvas>
+
+</body>
+</html>
