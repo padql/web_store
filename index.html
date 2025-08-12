@@ -445,7 +445,7 @@ canvas#doodleBg {
           (x.device ? `${x.durasi} (${x.device})` : x.durasi) === dur
         );
         if (!item) return alert('Pilih opsi dulu');
-        const message = `Halo kak, saya mau pesan:\nProduk: ${item.nama_produk}\nKategori: ${item.kategori}\nDurasi: ${item.durasi}\nHarga: Rp ${Number(item.harga).toLocaleString('id-ID')} apakah stock masih ada?`;
+        const message = `Halo kak, saya mau pesan ${item.nama_produk} ${item.kategori} ${item.durasi} Harga: Rp ${Number(item.harga).toLocaleString('id-ID')} apakah stock masih ada?`;
         window.open(`https://wa.me/6285722444031?text=${encodeURIComponent(message)}`, '_blank');
       };
 
@@ -478,8 +478,8 @@ function createDoodles() {
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       r: 5 + Math.random() * 12,
-      vx: (Math.random() - 0.5) * 0.3, // kecepatan horizontal pelan
-      vy: (Math.random() - 0.5) * 0.3, // kecepatan vertikal pelan
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
       type: Math.random() < 0.5 ? 'circle' : 'cross',
       opacity: 0.8 + Math.random() * 0.3
     });
