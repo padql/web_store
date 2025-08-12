@@ -445,7 +445,7 @@ canvas#doodleBg {
           (x.device ? `${x.durasi} (${x.device})` : x.durasi) === dur
         );
         if (!item) return alert('Pilih opsi dulu');
-        const message = `Halo kak, saya mau pesan ${item.nama_produk} ${item.kategori} ${item.durasi} Harga: Rp ${Number(item.harga).toLocaleString('id-ID')} apakah stock masih ada?`;
+        const message = `Halo kak, saya mau pesan <strong>${item.nama_produk} ${item.kategori} ${item.durasi} Harga Rp ${Number(item.harga).toLocaleString('id-ID')}</strong> apakah stock masih ada?`;
         window.open(`https://wa.me/6285722444031?text=${encodeURIComponent(message)}`, '_blank');
       };
 
