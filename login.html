@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Supabase</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+      --color-bg: #f0f4f8;
+      --color-text: #1e293b;
+      --color-form: #ffffff;
+      --color-accent: #0f766e;
+      --color-border: #cbd5e1;
+      --color-btn: #ffffff;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      margin: 0;
+      padding: 30px 15px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.dark-mode {
+      --color-bg: #0f172a;
+      --color-text: #f1f5f9;
+      --color-form: #1e293b;
+      --color-accent: #2dd4bf;
+      --color-border: #334155;
+      --color-btn: #000000;
+    }
+.form-container {
+      max-width: 420px;
+      margin: auto;
+      background: var(--color-form);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+      /* text-align: center; */
+      color: var(--color-accent);
+      margin-bottom: 20px;
+    }
+form input,
+    form select,
+    form textarea {
+      width: 100%;
+      margin-bottom: 15px;
+      height: 45px;
+      padding: 10px 14px;
+      box-sizing: border-box;
+      border: none;
+      border-radius: 12px;
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-size: 16px;
+      outline: none;
+    }
+
+    form input::placeholder,
+    form textarea::placeholder {
+      color: #94a3b8;
+    }
+
+    form button,
+    .btn {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px;
+      font-weight: bold;
+      text-align: center;
+      background: var(--color-accent);
+      color: var(--color-btn);
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+      margin-top: 12px;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background: #0d9488;
+    }
+
+.overlay {
+  position: fixed;
+  top: 0; 
+  left: 0;       /* mulai dari kiri layar */
+  width: 100%;   /* full width */
+  height: 100%;  /* full height */
+  background: rgba(250, 216, 216, 0.8); /* biar lebih kelihatan */
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto; /* klik ke bawah gak kena */
+  z-index: 9999; /* di atas semua elemen */
+}
+
+
+    .overlay.active {
+    left: 0;
+    pointer-events: auto;
+    }
+
+    @media (max-width: 600px) {
+    .overlay {
+        width: 100%; /* overlay ikut sidebar mobile */
+    }
+    }
+
+    .overlay-content h2 {
+    text-align: center;
+    margin-bottom: 0;
+    color: #ee2121;
+    }
+
+    .overlay-content p {
+    text-align: center;
+    margin-top: 15px 0;
+    }
+    .overlay-content button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid #591515;
+    background: none;
+    color: #591515;
+    font-weight: bold;
+    cursor: pointer;
+    }
+
+    .overlay-content button:hover {
+    background: #591515;
+    color: #ffffff;
+    }
+</style>
+</head>
+<body>
+    <!-- Overlay Maintenance -->
+  <div id="maintenanceOverlay" class="overlay">
+    <div class="overlay-content">
+      <h2>Maintenance</h2>
+      <p>Silakan coba lagi nanti.</p>
+      <center><button onclick="window.location.href='index.html'">Tutup</button></center>
+    </div>
+  </div>
+
+<form id="loginForm" class="form-container">
+    <h2>Login</h2>
+    <p class="error" id="error"></p>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button type="submit">Login</button>
+</form>
+
+<script>
+const supabaseUrl = 'https://uagbiwhyapkrxkyyjeza.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhZ2Jpd2h5YXBrcnhreXlqZXphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0NDUyNjcsImV4cCI6MjA2OTAyMTI2N30.k6dR0RL0yfElQC5wWKC2ab5npBSiLwaCecxq6j2fdWE';
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+const form = document.getElementById('loginForm');
+const error = document.getElementById('error');
+
+form.addEventListener('submit', async e => {
+    e.preventDefault();
+    error.textContent = '';
+
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    // login Supabase
+    const { data, error: err } = await supabase.auth.signInWithPassword({ email, password });
+
+    if(err){
+        error.textContent = err.message;
+        return;
+    }
+
+    // ambil role dari table users
+    const { data: userData, error: roleErr } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', data.user.id)
+        .single();
+
+    if(roleErr){
+        error.textContent = roleErr.message;
+        return;
+    }
+
+    // redirect sesuai role
+    if(userData.role === 'admin'){
+        window.location.href = 'promo.html';
+    } else {
+        window.location.href = 'login.html';
+    }
+});
+</script>
+</body>
+</html>

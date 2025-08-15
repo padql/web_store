@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>QudalauttHub - Store</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.cdnfonts.com/css/wtf-bokytime" rel="stylesheet">
   <style>
     body {
       font-family: poppins, sans-serif;
@@ -23,10 +24,69 @@
     }
 
     header h1 {
+      font-family: 'WTF Bokytime', sans-serif;
       margin: 0;
-      font-size: 1.6rem;
+      font-size: 1.9rem;
       color: #1e877c;
-      text-align: center;
+      text-align: left;
+    }
+
+    /* 🔹 Style tombol sidebar */
+    .sidebar-btn {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #1e877c;
+      font-size: 1.6rem;
+      cursor: pointer;
+      width: 45px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .sidebar-btn:hover {
+      color: #ffffff;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 250px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(8px);
+      border-right: 1px solid rgba(0,0,0,0.1);
+      padding: 20px;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+      transition: left 0.3s ease;
+      z-index: 2000;
+    }
+
+    .sidebar.active {
+      left: 0;
+    }
+
+    .sidebar h2 {
+      color: #1e877c;
+      margin-bottom: 20px;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 10px 0;
+      color: #333;
+      text-decoration: none;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .sidebar a:hover {
+      color: #1e877c;
     }
 
     .container {
@@ -300,8 +360,20 @@ canvas#doodleBg {
 </head>
 <body>
   <header>
-    <h1>QudalauttHub</h1>
+    <h1>QHub</h1>
+    <!-- 🔹 Tambah di dalam <header> -->
+    <button id="sidebarToggle" class="sidebar-btn" aria-label="Toggle Sidebar">
+      ☰
+    </button>
   </header>
+  
+  <!-- 🔹 Sidebar HTML -->
+  <div id="sidebar" class="sidebar">
+    <h2>Menu</h2>
+    <a href="index.html">Home</a>
+    <a id="promoLink" href="promo.html">Input Promo</a>
+    <a href="login.html">Login</a>
+  </div>
 
   <div id="products" class="container"></div>
 
@@ -327,7 +399,7 @@ canvas#doodleBg {
 
     const SUPABASE_URL = 'https://uagbiwhyapkrxkyyjeza.supabase.co';
     const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhZ2Jpd2h5YXBrcnhreXlqZXphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0NDUyNjcsImV4cCI6MjA2OTAyMTI2N30.k6dR0RL0yfElQC5wWKC2ab5npBSiLwaCecxq6j2fdWE';
-    const WA_NUMBER = '6285722444031';
+    // const WA_NUMBER = '6285722444031';
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
@@ -434,107 +506,135 @@ canvas#doodleBg {
         else modalHarga.textContent = 'Pilih kategori & durasi';
       }
 
-      modalCat.onchange = updateDurasi;
-      modalDur.onchange = updateHarga;
+        modalCat.onchange = updateDurasi;
+        modalDur.onchange = updateHarga;
 
-      modalBuyBtn.onclick = () => {
-        const cat = modalCat.value;
-        const dur = modalDur.value;
-        const item = group.find(x =>
-          x.kategori === cat &&
-          (x.device ? `${x.durasi} (${x.device})` : x.durasi) === dur
-        );
-        if (!item) return alert('Pilih opsi dulu');
-        const message = `Halo, saya mau pesan ${item.nama_produk} ${item.kategori} ${item.durasi} Harga Rp ${Number(item.harga).toLocaleString('id-ID')} apakah stock masih ada?`;
-        window.open(`https://wa.me/6282216792026?text=${encodeURIComponent(message)}`, '_blank');
-      };
+        modalBuyBtn.onclick = () => {
+          const cat = modalCat.value;
+          const dur = modalDur.value;
+          const item = group.find(x =>
+            x.kategori === cat &&
+            (x.device ? `${x.durasi} (${x.device})` : x.durasi) === dur
+          );
+          if (!item) return alert('Pilih opsi dulu');
+          const message = `Halo, saya mau pesan ${item.nama_produk} ${item.kategori} ${item.durasi} Harga Rp ${Number(item.harga).toLocaleString('id-ID')} apakah stock masih ada?`;
+          window.open(`https://wa.me/6282216792026?text=${encodeURIComponent(message)}`, '_blank'); //nomor 6285722444031 sementara nonaktif
+        };
 
-      updateDurasi();
-    });
+        updateDurasi();
+      });
 
-    card.appendChild(header);
-    card.appendChild(title);
-    container.appendChild(card);
-  });
-}
-
-
-    load();
-    const canvas = document.getElementById('doodleBg');
-const ctx = canvas.getContext('2d');
-
-let doodles = [];
-const count = 60;
-
-function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-
-function createDoodles() {
-  doodles = [];
-  for(let i = 0; i < count; i++) {
-    doodles.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      r: 5 + Math.random() * 12,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
-      type: Math.random() < 0.5 ? 'circle' : 'cross',
-      opacity: 0.8 + Math.random() * 0.3
+      card.appendChild(header);
+      card.appendChild(title);
+      container.appendChild(card);
     });
   }
-}
 
-function drawDoodle(d) {
-  ctx.strokeStyle = `rgba(163, 217, 165, ${d.opacity})`;
-  ctx.lineWidth = 1;
 
-  if (d.type === 'circle') {
-    ctx.beginPath();
-    ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-    ctx.stroke();
-  } else {
-    ctx.beginPath();
-    ctx.moveTo(d.x - d.r, d.y - d.r);
-    ctx.lineTo(d.x + d.r, d.y + d.r);
-    ctx.moveTo(d.x + d.r, d.y - d.r);
-    ctx.lineTo(d.x - d.r, d.y + d.r);
-    ctx.stroke();
+      load();
+      const canvas = document.getElementById('doodleBg');
+  const ctx = canvas.getContext('2d');
+
+  let doodles = [];
+  const count = 60;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
   }
-}
 
-function update() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  function createDoodles() {
+    doodles = [];
+    for(let i = 0; i < count; i++) {
+      doodles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: 5 + Math.random() * 12,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        type: Math.random() < 0.5 ? 'circle' : 'cross',
+        opacity: 0.8 + Math.random() * 0.3
+      });
+    }
+  }
 
-  doodles.forEach(d => {
-    d.x += d.vx;
-    d.y += d.vy;
+  function drawDoodle(d) {
+    ctx.strokeStyle = `rgba(163, 217, 165, ${d.opacity})`;
+    ctx.lineWidth = 1;
 
-    // kalau nyampe tepi, pantulkan
-    if (d.x < 0 || d.x > canvas.width) d.vx *= -1;
-    if (d.y < 0 || d.y > canvas.height) d.vy *= -1;
+    if (d.type === 'circle') {
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+      ctx.stroke();
+    } else {
+      ctx.beginPath();
+      ctx.moveTo(d.x - d.r, d.y - d.r);
+      ctx.lineTo(d.x + d.r, d.y + d.r);
+      ctx.moveTo(d.x + d.r, d.y - d.r);
+      ctx.lineTo(d.x - d.r, d.y + d.r);
+      ctx.stroke();
+    }
+  }
 
-    drawDoodle(d);
+  function update() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    doodles.forEach(d => {
+      d.x += d.vx;
+      d.y += d.vy;
+
+      // kalau nyampe tepi, pantulkan
+      if (d.x < 0 || d.x > canvas.width) d.vx *= -1;
+      if (d.y < 0 || d.y > canvas.height) d.vy *= -1;
+
+      drawDoodle(d);
+    });
+
+    requestAnimationFrame(update);
+  }
+
+  function initDoodle() {
+    resize();
+    createDoodles();
+    update();
+  }
+
+  window.addEventListener('resize', () => {
+    resize();
+    createDoodles();
   });
 
-  requestAnimationFrame(update);
-}
+  initDoodle();
 
-function initDoodle() {
-  resize();
-  createDoodles();
-  update();
-}
+  // 🔹 JS toggle sidebar
+  const sidebar = document.getElementById('sidebar');
+  const sidebarToggle = document.getElementById('sidebarToggle');
 
-window.addEventListener('resize', () => {
-  resize();
-  createDoodles();
-});
+  sidebarToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('active');
+  });
 
-initDoodle();
+  // Klik di luar sidebar untuk nutup
+  window.addEventListener('click', (e) => {
+    if (sidebar.classList.contains('active') && !sidebar.contains(e.target) && e.target !== sidebarToggle) {
+      sidebar.classList.remove('active');
+    }
+  });
 
+  // 🔹 Klik menu sidebar untuk nutup otomatis
+  document.querySelectorAll('#sidebar a').forEach(link => {
+    link.addEventListener('click', () => {
+      sidebar.classList.remove('active');
+    });
+  });
 
+  const role = localStorage.getItem('role'); // 'admin' atau 'user'
+
+  // Kalau belum login atau bukan admin, sembunyikan link Input Promo
+  if (role !== 'admin') {
+    document.getElementById('promoLink').style.display = 'none';
+  }
+  
   </script>
   <footer>
   <div class="footer-container">
