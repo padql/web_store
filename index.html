@@ -113,11 +113,11 @@
       backdrop-filter: blur(2px); /* efek blur kaca */
       -webkit-backdrop-filter: blur(12px); /* Safari support */
       border: 1px solid rgba(255, 255, 255, 0.3);
-      
+      opacity:  1;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: opacity 0.3s ease, box-shadow 0.2s ease;
       cursor: pointer;
     }
 
@@ -157,6 +157,15 @@
       padding: 10px 16px;
     }
 
+    .fade {
+      opacity: 0;
+      transform: translateY(15px) scale(0.95);
+      transition: opacity 0.9s ease, transform 0.5s ease;
+    }
+    .fade.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
     /* Modal Style */
     .modal {
       display: none;
@@ -357,6 +366,20 @@ canvas#doodleBg {
   background: transparent;
 }
 
+  /* Skeleton card placeholder */
+.card-placeholder {
+  background: linear-gradient(90deg, rgba(200,200,200,0.1) 25%, rgba(200,200,200,0.2) 50%, rgba(200,200,200,0.1) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 12px;
+  height: 180px; /* sama kaya tinggi card-header */
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
   </style>
 </head>
 <body>
@@ -376,6 +399,7 @@ canvas#doodleBg {
     <a href="login.html">Login</a>
   </div>
 
+  <!-- <div class="card-placeholder"></div> -->
   <div id="products" class="container"></div>
 
   <!-- Modal -->
@@ -428,7 +452,6 @@ canvas#doodleBg {
     return;
   }
 
-  // Mapping gambar
   const productImages = {
     'Alight Motion': '../images/am.png',
     'Bstation': '../images/bs.png',
@@ -442,7 +465,6 @@ canvas#doodleBg {
     'Vidio': '../images/vid.png'
   };
 
-  // Kelompokkan data
   const grouped = {};
   data.forEach(p => {
     if (!grouped[p.nama_produk]) grouped[p.nama_produk] = [];
@@ -452,26 +474,50 @@ canvas#doodleBg {
   const container = document.getElementById('products');
   container.innerHTML = '';
 
-  Object.keys(grouped).forEach(nama_produk => {
+  Object.keys(grouped).forEach((nama_produk, index) => {
     const group = grouped[nama_produk];
 
-    // Card
+    // buat card
     const card = document.createElement('div');
-    card.className = 'card';
+    card.className = 'card fade'; // awalnya hidden
 
-    // Header (gambar)
+    // header placeholder
     const header = document.createElement('div');
     header.className = 'card-header';
-    header.innerHTML = `
-      <img 
-        src="${productImages[nama_produk] || 'https://via.placeholder.com/300x180'}" 
-        alt="${nama_produk}">
-    `;
+    const placeholder = document.createElement('div');
+    placeholder.className = 'card-placeholder';
+    header.appendChild(placeholder);
+    card.appendChild(header);
 
-    // Title
+    // title
     const title = document.createElement('div');
     title.className = 'card-title';
     title.textContent = nama_produk;
+    card.appendChild(title);
+
+    container.appendChild(card);
+
+    // delay tiap card beda-beda
+    setTimeout(() => {
+      const img = new Image();
+      img.src = productImages[nama_produk] + '?t=' + Date.now();
+      img.alt = nama_produk;
+      img.classList.add('fade');
+
+      img.onload = () => {
+        header.innerHTML = '';
+        header.appendChild(img);
+
+        // dua rAF biar pasti ter-render
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            img.classList.add('show');
+            card.classList.add('show'); // fade card juga
+          });
+        });
+      };
+    }, index * 300); // 300ms delay per card
+
 
     // Klik buka modal
     header.addEventListener('click', () => {
