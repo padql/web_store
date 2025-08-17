@@ -381,6 +381,134 @@ canvas#doodleBg {
   100% { background-position: 200% 0; }
 }
 
+.banner-slider {
+  position: relative;
+  max-width: 1200px;
+  aspect-ratio: 1600 / 300;
+  height: 300px;
+  margin: 15px auto;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(2, 70, 59, 0.272);
+}
+
+@media (max-width: 600px) {
+  .banner-slider {
+    max-width: 360px;
+    height: auto; /* lebih kecil di HP */
+  }
+}
+
+.banner-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s ease-in-out;
+}
+
+.banner-slider .slide {
+  min-width: 100%;
+  height: 100%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.banner-slider img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 360px) {
+  .banner-slider {
+    height: auto; /* lebih kecil di HP */
+  }
+  .promo-poster h2 {
+    font-size: 1.3rem;
+  }
+  .promo-poster p {
+    font-size: 1rem;
+  }
+}
+
+/* khusus slide promo */
+.slide.promo {
+  background: linear-gradient(135deg, #27aeae, #1e877c);
+  color: rgb(255, 255, 255);
+  font-size: 1rem;
+  font-weight: bold;
+  height: 100%;
+  text-align: center;
+  align-items: center;
+  justify-content: left;
+  padding: 20px;
+}
+
+.promo-content {
+  max-width: 600px;
+  margin: 0 72px;
+  padding: 0 20px;
+}
+
+@media (max-width: 600px) {
+  .slide.promo {
+    max-width: 360px;
+    height: 30px; /* lebih kecil di HP */
+  }
+}
+
+.promo-poster {
+  max-width: 600px;
+  padding: 20px;
+  left: -10px;
+}
+
+.promo-poster h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  animation: bounce 1.2s infinite;
+}
+
+.promo-poster p {
+  font-size: 1.2rem;
+  margin: 8px 0;
+}
+
+.promo-poster .harga {
+  font-size: 1.6rem;
+  font-weight: bold;
+  background: rgba(255,255,255,0.2);
+  padding: 6px 12px;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.promo-poster .cta {
+  margin-top: 15px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  background: white;
+  color: #ff4b2b;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.promo-poster .cta:hover {
+  background: #ffecec;
+  transform: scale(1.05);
+}
+
+/* animasi bounce */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+
   </style>
 </head>
 <body>
@@ -399,6 +527,20 @@ canvas#doodleBg {
     <a id="promoLink" href="promo.html">Input Promo</a>
     <a href="login.html">Login</a>
   </div>
+
+  <!-- Banner Slider -->
+<div class="banner-slider">
+  <div class="banner-track" id="bannerTrack">
+    <!-- Banner Poster Tetap -->
+    <div class="slide">
+      <img src="images/banner-pos1.png" alt="Poster 1">
+    </div>
+    <!-- Promo akan ditambah lewat JS -->
+  </div>
+</div>
+
+
+<!-- tombol navigasi -->
 
   <!-- <div class="card-placeholder"></div> -->
   <div id="products" class="container"></div>
@@ -425,6 +567,7 @@ canvas#doodleBg {
 
     const SUPABASE_URL = 'https://uagbiwhyapkrxkyyjeza.supabase.co';
     const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhZ2Jpd2h5YXBrcnhreXlqZXphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0NDUyNjcsImV4cCI6MjA2OTAyMTI2N30.k6dR0RL0yfElQC5wWKC2ab5npBSiLwaCecxq6j2fdWE';
+    
     // const WA_NUMBER = '6285722444031';
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
@@ -438,14 +581,82 @@ canvas#doodleBg {
     const modalBuyBtn = document.getElementById('modalBuyBtn');
     const closeModal = document.getElementById('closeModal');
 
+    async function loadBanners() {
+  const track = document.getElementById("bannerTrack");
+
+  const { data: promos } = await supabase
+    .from("promo")
+    .select("*, products(nama_produk)")
+    .eq("aktif", true);
+
+  if (promos && promos.length > 0) {
+    promos.forEach(pr => {
+      const now = new Date();
+      const mulai = pr.tanggal_mulai ? new Date(pr.tanggal_mulai) : null;
+      const akhir = pr.tanggal_berakhir ? new Date(pr.tanggal_berakhir) : null;
+
+      if ((!mulai || mulai <= now) && (!akhir || akhir >= now)) {
+        // cek apakah banner promo dengan id ini sudah ada
+        if (!track.querySelector(`.slide.promo[data-id="${pr.id}"]`)) {
+          const slide = document.createElement("div");
+          slide.className = "slide promo";
+          slide.dataset.id = pr.id; // biar unik
+          slide.innerHTML = `
+            <div class="promo-content">
+              🎉 Promo Spesial! <br>
+              ${pr.products?.nama_produk} <br>
+              mulai Rp ${(Number(pr.harga_modal_promo)).toLocaleString("id-ID")}
+            </div>
+          `;
+          track.appendChild(slide);
+        }
+      }
+    });
+  }
+}
+
+
+// --- Auto Slider ---
+let slideIndex = 0;
+function showSlide(n) {
+  const track = document.getElementById("bannerTrack");
+  const slides = document.querySelectorAll(".banner-track .slide");
+  if (!slides.length) return;
+  slideIndex = (n + slides.length) % slides.length;
+  track.style.transform = `translateX(-${slideIndex * 100}%)`;
+}
+
+function autoSlide() {
+  showSlide(slideIndex + 1);
+}
+
+setInterval(autoSlide, 5000); // ganti tiap 5 detik
+
+// Init
+loadBanners().then(() => showSlide(0));
+
+
+
     closeModal.onclick = () => modal.style.display = 'none';
     window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
 
     async function load() {
   const { data, error } = await supabase
-    .from('products')
-    .select('*')
-    .order('nama_produk', { ascending: true });
+  .from('products')
+  .select(`
+    nama_produk,
+    kategori,
+    durasi,
+    harga_modal,
+    keuntungan,
+    promo (
+      harga_modal_promo,
+      aktif,
+      tanggal_mulai,
+      tanggal_berakhir
+    )
+  `)
+  .order('nama_produk', { ascending: true });
 
   if (error) {
     console.error(error);
@@ -476,19 +687,42 @@ canvas#doodleBg {
   container.innerHTML = '';
 
   Object.keys(grouped).forEach((nama_produk, index) => {
-    const group = grouped[nama_produk];
+  const group = grouped[nama_produk];
 
-    // buat card
-    const card = document.createElement('div');
-    card.className = 'card fade'; // awalnya hidden
+  // buat card
+  const card = document.createElement('div');
+  card.className = 'card fade';
 
-    // header placeholder
-    const header = document.createElement('div');
-    header.className = 'card-header';
-    const placeholder = document.createElement('div');
-    placeholder.className = 'card-placeholder';
-    header.appendChild(placeholder);
-    card.appendChild(header);
+  // header
+  const header = document.createElement('div');
+  header.className = 'card-header';
+
+  // 🔹 cek apakah ada promo aktif
+  let adaPromo = group.some(p => {
+    if (!p.promo || p.promo.length === 0) return false;
+    const pr = p.promo[0];
+    const now = new Date();
+    const mulai = pr.tanggal_mulai ? new Date(pr.tanggal_mulai) : null;
+    const akhir = pr.tanggal_berakhir ? new Date(pr.tanggal_berakhir) : null;
+    return pr.aktif && (!mulai || mulai <= now) && (!akhir || akhir >= now);
+  });
+
+  // 🔹 kasih label "Promo"
+  if (adaPromo) {
+    const badge = document.createElement('span');
+    badge.textContent = 'Promo';
+    badge.style.position = 'absolute';
+    badge.style.top = '10px';
+    badge.style.left = '10px';
+    badge.style.background = '#e74c3c';
+    badge.style.color = 'white';
+    badge.style.fontSize = '0.8rem';
+    badge.style.fontWeight = 'bold';
+    badge.style.padding = '4px 8px';
+    badge.style.borderRadius = '8px';
+    badge.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
+    header.appendChild(badge);
+  }
 
     // title
     const title = document.createElement('div');
@@ -500,24 +734,51 @@ canvas#doodleBg {
 
     // delay tiap card beda-beda
     setTimeout(() => {
-      const img = new Image();
-      img.src = productImages[nama_produk] + '?t=' + Date.now();
-      img.alt = nama_produk;
-      img.classList.add('fade');
+  const img = new Image();
+  img.src = productImages[nama_produk] + '?t=' + Date.now();
+  img.alt = nama_produk;
+  img.classList.add('fade');
 
-      img.onload = () => {
-        header.innerHTML = '';
-        header.appendChild(img);
+  img.onload = () => {
+    header.innerHTML = '';
+    header.appendChild(img);
 
-        // dua rAF biar pasti ter-render
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            img.classList.add('show');
-            card.classList.add('show'); // fade card juga
-          });
-        });
-      };
-    }, index * 300); // 300ms delay per card
+    // 🔹 cek promo & tempel badge setelah gambar ada
+    let adaPromo = group.some(p => {
+      if (!p.promo || p.promo.length === 0) return false;
+      const pr = p.promo[0];
+      const now = new Date();
+      const mulai = pr.tanggal_mulai ? new Date(pr.tanggal_mulai) : null;
+      const akhir = pr.tanggal_berakhir ? new Date(pr.tanggal_berakhir) : null;
+      return pr.aktif && (!mulai || mulai <= now) && (!akhir || akhir >= now);
+    });
+
+    if (adaPromo) {
+      const badge = document.createElement('span');
+      badge.textContent = 'Promo';
+      badge.style.position = 'absolute';
+      badge.style.top = '10px';
+      badge.style.left = '10px';
+      badge.style.background = '#e74c3c';
+      badge.style.color = 'white';
+      badge.style.fontSize = '0.8rem';
+      badge.style.fontWeight = 'bold';
+      badge.style.padding = '4px 8px';
+      badge.style.borderRadius = '8px';
+      badge.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
+      header.appendChild(badge);
+    }
+
+    // dua rAF biar pasti ter-render
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        img.classList.add('show');
+        card.classList.add('show'); 
+      });
+    });
+  };
+}, index * 300);
+
 
 
     // Klik buka modal
@@ -544,15 +805,51 @@ canvas#doodleBg {
       }
 
       function updateHarga() {
-        const cat = modalCat.value;
-        const dur = modalDur.value;
-        const item = group.find(x =>
-          x.kategori === cat &&
-          (x.device ? `${x.durasi} (${x.device})` : x.durasi) === dur
-        );
-        if (item) modalHarga.textContent = 'Rp ' + Number(item.harga).toLocaleString('id-ID');
-        else modalHarga.textContent = 'Pilih kategori & durasi';
-      }
+  const cat = modalCat.value;
+  const dur = modalDur.value;
+  const item = group.find(x =>
+    x.kategori === cat &&
+    (x.device ? `${x.durasi} (${x.device})` : x.durasi) === dur
+  );
+
+  if (!item) {
+    modalHarga.textContent = 'Pilih kategori & durasi';
+    return;
+  }
+
+  // harga normal
+  const hargaNormal = (item.harga_modal ?? 0) + (item.keuntungan ?? 0);
+
+let hargaFinal = hargaNormal;
+if (item.promo && item.promo.length > 0) {
+  const pr = item.promo[0];
+  const now = new Date();
+  const mulai = pr.tanggal_mulai ? new Date(pr.tanggal_mulai) : null;
+  const akhir = pr.tanggal_berakhir ? new Date(pr.tanggal_berakhir) : null;
+
+  if (pr.aktif && (!mulai || mulai <= now) && (!akhir || akhir >= now)) {
+    hargaFinal = (pr.harga_modal_promo ?? item.harga_modal) + (item.keuntungan ?? 0);
+  }
+}
+
+item.hargaFinal = hargaFinal; // simpan harga final di item
+
+  // tampilkan harga
+  if (hargaFinal < hargaNormal) {
+    modalHarga.innerHTML = `
+      <span style="text-decoration: line-through; color: grey; margin-right: 8px;">
+        Rp ${Number(hargaNormal).toLocaleString('id-ID')}
+      </span>
+      <span style="color: red; font-weight: bold;">
+        Rp ${Number(hargaFinal).toLocaleString('id-ID')}
+      </span>
+    `;
+  } else {
+    modalHarga.textContent = 'Rp ' + Number(hargaFinal).toLocaleString('id-ID');
+  }
+}
+
+
 
         modalCat.onchange = updateDurasi;
         modalDur.onchange = updateHarga;
@@ -565,7 +862,7 @@ canvas#doodleBg {
             (x.device ? `${x.durasi} (${x.device})` : x.durasi) === dur
           );
           if (!item) return alert('Pilih opsi dulu');
-          const message = `Halo, saya mau pesan ${item.nama_produk} ${item.kategori} ${item.durasi} Harga Rp ${Number(item.harga).toLocaleString('id-ID')} apakah stock masih ada?`;
+          const message = `Halo, saya mau pesan ${item.nama_produk} ${item.kategori} ${item.durasi} Harga Rp ${Number(item.hargaFinal).toLocaleString('id-ID')} apakah stock masih ada?`;
           window.open(`https://wa.me/6282216792026?text=${encodeURIComponent(message)}`, '_blank'); //nomor 6285722444031 sementara nonaktif
         };
 
@@ -578,8 +875,9 @@ canvas#doodleBg {
     });
   }
 
-
       load();
+      loadBanners();
+
       const canvas = document.getElementById('doodleBg');
   const ctx = canvas.getContext('2d');
 
