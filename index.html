@@ -385,7 +385,7 @@ canvas#doodleBg {
   position: relative;
   max-width: 1200px;
   aspect-ratio: 1600 / 300;
-  height: 300px;
+  height: auto;
   margin: 15px auto;
   overflow: hidden;
   border-radius: 12px;
@@ -595,22 +595,21 @@ canvas#doodleBg {
       const mulai = pr.tanggal_mulai ? new Date(pr.tanggal_mulai) : null;
       const akhir = pr.tanggal_berakhir ? new Date(pr.tanggal_berakhir) : null;
 
-      if ((!mulai || mulai <= now) && (!akhir || akhir >= now)) {
-        // cek apakah banner promo dengan id ini sudah ada
-        if (!track.querySelector(`.slide.promo[data-id="${pr.id}"]`)) {
-          const slide = document.createElement("div");
-          slide.className = "slide promo";
-          slide.dataset.id = pr.id; // biar unik
-          slide.innerHTML = `
-            <div class="promo-content">
-              🎉 Promo Spesial! <br>
-              ${pr.products?.nama_produk} <br>
-              mulai Rp ${(Number(pr.harga_modal_promo)).toLocaleString("id-ID")}
-            </div>
-          `;
-          track.appendChild(slide);
-        }
-      }
+      // if ((!mulai || mulai <= now) && (!akhir || akhir >= now)) {
+      //   if (!track.querySelector(`.slide.promo[data-id="${pr.id}"]`)) {
+      //     const slide = document.createElement("div");
+      //     slide.className = "slide promo";
+      //     slide.dataset.id = pr.id; 
+      //     slide.innerHTML = `
+      //       <div class="promo-content">
+      //         🎉 Promo Spesial! <br>
+      //         ${pr.products?.nama_produk} <br>
+      //         mulai Rp ${(Number(pr.harga_modal_promo)).toLocaleString("id-ID")}
+      //       </div>
+      //     `;
+      //     track.appendChild(slide);
+      //   }
+      // }
     });
   }
 }
