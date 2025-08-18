@@ -535,7 +535,9 @@ canvas#doodleBg {
     <div class="slide">
       <img src="images/banner-pos1.png" alt="Poster 1">
     </div>
-    <!-- Promo akan ditambah lewat JS -->
+    <div class="slide">
+      <img src="images/banner-pos1.png" alt="Poster 1">
+    </div>
   </div>
 </div>
 
@@ -582,37 +584,8 @@ canvas#doodleBg {
     const closeModal = document.getElementById('closeModal');
 
     async function loadBanners() {
-  const track = document.getElementById("bannerTrack");
-
-  const { data: promos } = await supabase
-    .from("promo")
-    .select("*, products(nama_produk)")
-    .eq("aktif", true);
-
-  if (promos && promos.length > 0) {
-    promos.forEach(pr => {
-      const now = new Date();
-      const mulai = pr.tanggal_mulai ? new Date(pr.tanggal_mulai) : null;
-      const akhir = pr.tanggal_berakhir ? new Date(pr.tanggal_berakhir) : null;
-
-      // if ((!mulai || mulai <= now) && (!akhir || akhir >= now)) {
-      //   if (!track.querySelector(`.slide.promo[data-id="${pr.id}"]`)) {
-      //     const slide = document.createElement("div");
-      //     slide.className = "slide promo";
-      //     slide.dataset.id = pr.id; 
-      //     slide.innerHTML = `
-      //       <div class="promo-content">
-      //         🎉 Promo Spesial! <br>
-      //         ${pr.products?.nama_produk} <br>
-      //         mulai Rp ${(Number(pr.harga_modal_promo)).toLocaleString("id-ID")}
-      //       </div>
-      //     `;
-      //     track.appendChild(slide);
-      //   }
-      // }
-    });
-  }
-}
+      const track = document.getElementById("bannerTrack");
+    }
 
 
 // --- Auto Slider ---
@@ -802,38 +775,42 @@ loadBanners().then(() => showSlide(0));
 
         updateHarga();
       }
-
-      function updateHarga() {
+function updateHarga() {
   const cat = modalCat.value;
   const dur = modalDur.value;
   const item = group.find(x =>
     x.kategori === cat &&
     (x.device ? `${x.durasi} (${x.device})` : x.durasi) === dur
   );
-
   if (!item) {
     modalHarga.textContent = 'Pilih kategori & durasi';
     return;
   }
-
-  // harga normal
+  // Normal price calculation
   const hargaNormal = (item.harga_modal ?? 0) + (item.keuntungan ?? 0);
-
-let hargaFinal = hargaNormal;
-if (item.promo && item.promo.length > 0) {
-  const pr = item.promo[0];
-  const now = new Date();
-  const mulai = pr.tanggal_mulai ? new Date(pr.tanggal_mulai) : null;
-  const akhir = pr.tanggal_berakhir ? new Date(pr.tanggal_berakhir) : null;
-
-  if (pr.aktif && (!mulai || mulai <= now) && (!akhir || akhir >= now)) {
-    hargaFinal = (pr.harga_modal_promo ?? item.harga_modal) + (item.keuntungan ?? 0);
+  let hargaFinal = hargaNormal; // Start with the normal price
+  // Check all promotions for the selected item
+  if (item.promo && item.promo.length > 0) {
+    const now = new Date();
+    
+    // Filter active promotions for the same product, category, and duration
+    const activePromos = item.promo.filter(pr => { pr.kategori
+      const mulai = pr.tanggal_mulai ? new Date(pr.tanggal_mulai) : null;
+      const akhir = pr.tanggal_berakhir ? new Date(pr.tanggal_berakhir) : null;
+      // Check if the promotion is active
+      return pr.aktif && (!mulai || mulai <= now) && (!akhir || akhir >= now);
+    });
+    // If there are active promotions, find the latest one
+    if (activePromos.length > 0) {
+      // Sort promotions by start date (latest first)
+      activePromos.sort((a, b) => new Date(b.tanggal_mulai) - new Date(a.tanggal_mulai));
+      // Take the latest active promotion
+      const latestPromo = activePromos[0];
+      hargaFinal = (latestPromo.harga_modal_promo ?? item.harga_modal) + (item.keuntungan ?? 0);
+    }
   }
-}
-
-item.hargaFinal = hargaFinal; // simpan harga final di item
-
-  // tampilkan harga
+  item.hargaFinal = hargaFinal; // Save the final price in the item
+  // Display the price
   if (hargaFinal < hargaNormal) {
     modalHarga.innerHTML = `
       <span style="text-decoration: line-through; color: grey; margin-right: 8px;">
@@ -847,8 +824,6 @@ item.hargaFinal = hargaFinal; // simpan harga final di item
     modalHarga.textContent = 'Rp ' + Number(hargaFinal).toLocaleString('id-ID');
   }
 }
-
-
 
         modalCat.onchange = updateDurasi;
         modalDur.onchange = updateHarga;
