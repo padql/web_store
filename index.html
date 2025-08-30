@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id"> <!-- Set the default language to Indonesian -->
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -8,31 +8,29 @@
   <link href="https://fonts.cdnfonts.com/css/wtf-bokytime" rel="stylesheet">
   <link rel="icon" type="image/png" href="images/tq(bg).png">
   <style>
+    /* Basic styles for body and header */
     body {
       font-family: poppins, sans-serif;
       background: #f9f9f9;
       margin: 0;
       padding: 0;
     }
-
     header {
-      background: #27aeae;
+      background: #27aeae; /* Header background color */
       padding: 20px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.05);
       position: sticky;
       top: 0;
       z-index: 999;
     }
-
     header h1 {
-      font-family: 'WTF Bokytime', sans-serif;
+      font-family: 'WTF Bokytime', sans-serif; /* Custom font for header */
       margin: 0;
       font-size: 1.9rem;
-      color: #02443d;
+      color: #02443d; /* Header text color */
       text-align: left;
     }
-
-    /* 🔹 Style tombol sidebar */
+    /* Sidebar button styles */
     .sidebar-btn {
       position: absolute;
       right: 20px;
@@ -50,14 +48,13 @@
       justify-content: center;
     }
     .sidebar-btn:hover {
-      color: #04ffe6;
-      background: none;
+      color: #04ffe6; /* Hover effect for sidebar button */
     }
-
+    /* Sidebar styles */
     .sidebar {
       position: fixed;
       top: 0;
-      left: -100%;
+      left: -100%; /* Initially hidden off-screen */
       width: 250px;
       height: 100%;
       background: rgba(255, 255, 255, 0.9);
@@ -65,19 +62,16 @@
       border-right: 1px solid rgba(0,0,0,0.1);
       padding: 20px;
       box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-      transition: left 0.3s ease;
+      transition: left 0.3s ease; /* Smooth transition for sidebar */
       z-index: 2000;
     }
-
     .sidebar.active {
-      left: 0;
+      left: 0; /* Show sidebar when active */
     }
-
     .sidebar h2 {
-      color: #1e877c;
+      color: #1e877c; /* Sidebar title color */
       margin-bottom: 20px;
     }
-
     .sidebar a {
       display: block;
       padding: 10px 0;
@@ -86,33 +80,29 @@
       font-weight: 500;
       border-bottom: 1px solid rgba(0,0,0,0.05);
     }
-
     .sidebar a:hover {
-      color: #1e877c;
+      color: #1e877c; /* Hover effect for sidebar links */
     }
-
+    /* Container for product cards */
     .container {
       padding: 20px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); /* Responsive grid layout */
       gap: 20px;
       max-width: 1200px;
       margin: auto;
     }
-
-    /* Pas di layar kecil (mobile), paksa 2 kolom */
     @media (max-width: 600px) {
       .container {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr); /* Force 2 columns on small screens */
       }
     }
-
+    /* Card styles for products */
     .card {
-      background: rgba(126, 148, 161, 0.2); /* putih transparan */
+      background: rgba(126, 148, 161, 0.2); /* Light transparent background */
       border-radius: 12px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(2px); /* efek blur kaca */
-      -webkit-backdrop-filter: blur(12px); /* Safari support */
+      backdrop-filter: blur(2px); /* Glass effect */
       border: 1px solid rgba(255, 255, 255, 0.3);
       opacity:  1;
       overflow: hidden;
@@ -121,43 +111,34 @@
       transition: opacity 0.3s ease, box-shadow 0.2s ease;
       cursor: pointer;
     }
-
     .card:hover {
-      transform: translateY(-6px);
+      transform: translateY(-6px); /* Lift effect on hover */
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-      background: rgba(197, 252, 241, 0.3);
+      background: rgba(197, 252, 241, 0.3); /* Change background on hover */
       border-color: rgba(255, 255, 255, 0.5);
     }
-
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-    }
-
+    /* Card header styles */
     .card-header {
       position: relative;
       width: 100%;
       height: 180px;
       overflow: hidden;
     }
-
     .card-header img {
       width: 100%;
-      height: 180px; /* Atur tinggi sesuai kebutuhan */
-      object-fit: contain; /* Biar gambar gak ketarik */
-      /* background-color: #fff;  */
-      border-radius: 8px; /* Kalau mau rounded */
-      padding: 10px; /* Biar ada jarak */
+      height: 180px; /* Set height for images */
+      object-fit: contain; /* Maintain aspect ratio */
+      border-radius: 8px; /* Rounded corners */
+      padding: 10px; /* Space around image */
       box-sizing: border-box;
     }
-
     .card-title {
       font-size: 1.1rem;
       font-weight: bold;
-      color: #2c3e50;
+      color: #2c3e50; /* Title color */
       padding: 10px 16px;
     }
-
+    /* Fade animation styles */
     .fade {
       opacity: 0;
       transform: translateY(15px) scale(0.95);
@@ -167,54 +148,48 @@
       opacity: 1;
       transform: translateY(0) scale(1);
     }
-    /* Modal Style */
+    /* Modal styles */
     .modal {
-      display: none;
+      display: none; /* Hidden by default */
       position: fixed;
       z-index: 1000;
       left: 0; top: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.5);
+      background: rgba(0,0,0,0.5); /* Dark overlay */
       justify-content: center;
       align-items: center;
       padding: 20px;
     }
-
     @media (max-width: 600px) {
       .modal {
-        padding: 1px;
+        padding: 1px; /* Less padding on small screens */
       }
     }
-
     .modal-content {
-      background: #fff;
+      background: #fff; /* White background for modal */
       border-radius: 12px;
       max-width: 500px;
       width: 100%;
       padding: 20px;
       box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-      animation: fadeIn 0.3s ease;
+      animation: fadeIn 0.3s ease; /* Fade in animation */
     }
-
-     @media (max-width: 600px) {
+    @media (max-width: 600px) {
       .modal-content {
-        width: 70%;
+        width: 70%; /* Smaller modal on mobile */
       }
     }
-
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-
     .modal-header h2 {
       font-size: 1.4rem;
-      color: #1e877c;
+      color: #1e877c; /* Header color in modal */
       margin: 0;
     }
-
     .close {
       font-size: 1.5rem;
       cursor: pointer;
@@ -222,48 +197,42 @@
       background: none;
       color: #999;
     }
-
     .close:hover {
-      color: #333;
+      color: #333; /* Change color on hover */
     }
-
     .modal-body {
       margin-top: 15px;
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
-
     select, button {
       padding: 10px;
       border-radius: 8px;
-      border: 1px solid #ddd;
+      border: 1px solid #ddd; /* Border for inputs */
       font-size: 0.95rem;
     }
-
     button {
-      background: #1e877c;
+      background: #1e877c; /* Button background color */
       color: white;
       font-weight: bold;
       cursor: pointer;
-      transition: background 0.2s ease;
+      transition: background 0.2s ease; /* Button hover transition */
     }
-
     button:hover {
-      background: #1b7b72;
+      background: #1b7b72; /* Darker background on hover */
     }
-
     .harga {
       font-weight: bold;
       font-size: 1.1rem;
-      color: #e67e22;
+      color: #e67e22; /* Price color */
     }
-
+    /* Keyframes for fade-in animation */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-10px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
+    /* Styles for category dropdown */
     #modalCat {
       width: 100%;
       padding: 10px 14px;
@@ -273,20 +242,19 @@
       color: #1e877c;
       background-color: #f9fff9;
       cursor: pointer;
-      transition: border-color 0.3s ease;
-      appearance: none; /* Buat ilangin default arrow di beberapa browser */
+      transition: border-color 0.3s ease; /* Transition for border color */
+      appearance: none; /* Remove default arrow */
       background-image: url('data:image/svg+xml;utf8,<svg fill="%2327ae60" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
       background-repeat: no-repeat;
       background-position: right 10px center;
       background-size: 16px;
     }
-
     #modalCat:focus {
-      border-color: #1b7b72;
+      border-color: #1b7b72; /* Border color on focus */
       outline: none;
-      box-shadow: 0 0 5px #1b7b72;
+      box-shadow: 0 0 5px #1b7b72; /* Shadow on focus */
     }
-
+    /* Similar styles for duration dropdown */
     #modalDur {
       width: 100%;
       padding: 10px 14px;
@@ -297,257 +265,225 @@
       background-color: #f9fff9;
       cursor: pointer;
       transition: border-color 0.3s ease;
-      appearance: none; /* Buat ilangin default arrow di beberapa browser */
+      appearance: none; /* Remove default arrow */
       background-image: url('data:image/svg+xml;utf8,<svg fill="%2327ae60" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
       background-repeat: no-repeat;
       background-position: right 10px center;
       background-size: 16px;
     }
-
     #modalDur:focus {
-      border-color: #1e877c;
+      border-color: #1e877c; /* Border color on focus */
       outline: none;
-      box-shadow: 0 0 5px #1e8087;
+      box-shadow: 0 0 5px #1e8087; /* Shadow on focus */
     }
-
+    /* Footer styles */
     footer {
-  background: #27aeae;
-  color: #02443d;
-  padding: 20px 0;
-  margin-top: 40px;
-  font-size: 0.9rem;
-  text-align: center;
-}
-
-.footer-container {
-  max-width: 1200px;
-  margin: auto;
-  padding: 0 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.footer-links {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.footer-links a {
-  color: #02443d;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.footer-links a:hover {
-  color: #04ffe6;
-  text-decoration: underline;
-}
-
-/* Responsive: di layar kecil, link di bawah teks */
-@media (max-width: 600px) {
-  .footer-container {
-    flex-direction: column;
-    font-size: 0.85rem;
-  }
-  .footer-links {
-    justify-content: center;
-  }
-}
-
-canvas#doodleBg {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -1;       /* biar di belakang konten */
-  pointer-events: none; /* gak ganggu klik/touch */
-  background: transparent;
-}
-
-  /* Skeleton card placeholder */
-.card-placeholder {
-  background: linear-gradient(90deg, rgba(200,200,200,0.1) 25%, rgba(200,200,200,0.2) 50%, rgba(200,200,200,0.1) 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: 12px;
-  height: 180px; /* sama kaya tinggi card-header */
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-.banner-slider {
-  position: relative;
-  max-width: 1200px;
-  aspect-ratio: 1600 / 300;
-  height: auto;
-  margin: 15px auto;
-  overflow: hidden;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(2, 70, 59, 0.272);
-}
-
-@media (max-width: 600px) {
-  .banner-slider {
-    max-width: 360px;
-    height: auto; /* lebih kecil di HP */
-  }
-}
-
-.banner-track {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  transition: transform 0.6s ease-in-out;
-}
-
-.banner-slider .slide {
-  min-width: 100%;
-  height: 100%;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.banner-slider img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-@media (max-width: 360px) {
-  .banner-slider {
-    height: auto; /* lebih kecil di HP */
-  }
-  .promo-poster h2 {
-    font-size: 1.3rem;
-  }
-  .promo-poster p {
-    font-size: 1rem;
-  }
-}
-
-/* khusus slide promo */
-.slide.promo {
-  background: linear-gradient(135deg, #27aeae, #1e877c);
-  color: rgb(255, 255, 255);
-  font-size: 1rem;
-  font-weight: bold;
-  height: 100%;
-  text-align: center;
-  align-items: center;
-  justify-content: left;
-  padding: 20px;
-}
-
-.promo-content {
-  max-width: 600px;
-  margin: 0 72px;
-  padding: 0 20px;
-}
-
-@media (max-width: 600px) {
-  .slide.promo {
-    max-width: 360px;
-    height: 30px; /* lebih kecil di HP */
-  }
-}
-
-.promo-poster {
-  max-width: 600px;
-  padding: 20px;
-  left: -10px;
-}
-
-.promo-poster h2 {
-  font-size: 2rem;
-  margin-bottom: 10px;
-  animation: bounce 1.2s infinite;
-}
-
-.promo-poster p {
-  font-size: 1.2rem;
-  margin: 8px 0;
-}
-
-.promo-poster .harga {
-  font-size: 1.6rem;
-  font-weight: bold;
-  background: rgba(255,255,255,0.2);
-  padding: 6px 12px;
-  border-radius: 8px;
-  display: inline-block;
-}
-
-.promo-poster .cta {
-  margin-top: 15px;
-  padding: 10px 20px;
-  font-size: 1rem;
-  background: white;
-  color: #ff4b2b;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.promo-poster .cta:hover {
-  background: #ffecec;
-  transform: scale(1.05);
-}
-
-/* animasi bounce */
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
-
-
+      background: #27aeae; /* Footer background color */
+      color: #02443d; /* Footer text color */
+      padding: 20px 0;
+      margin-top: 40px;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+    .footer-container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      color: #02443d;
+      text-decoration: none;
+      transition: color 0.3s ease; /* Transition for link color */
+    }
+    .footer-links a:hover {
+      color: #04ffe6; /* Change color on hover */
+      text-decoration: underline; /* Underline on hover */
+    }
+    /* Responsive styles for footer */
+    @media (max-width: 600px) {
+      .footer-container {
+        flex-direction: column;
+        font-size: 0.85rem;
+      }
+      .footer-links {
+        justify-content: center;
+      }
+    }
+    /* Canvas for doodle background */
+    canvas#doodleBg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1; /* Behind all content */
+      pointer-events: none; /* Prevent interaction */
+      background: transparent;
+    }
+    /* Skeleton card placeholder */
+    .card-placeholder {
+      background: linear-gradient(90deg, rgba(200,200,200,0.1) 25%, rgba(200,200,200,0.2) 50%, rgba(200,200,200,0.1) 75%);
+      background-size: 200% 100%; /* Animation effect */
+      animation: shimmer 1.5s infinite;
+      border-radius: 12px;
+      height: 180px; /* Same height as card header */
+    }
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    /* Banner slider styles */
+    .banner-slider {
+      position: relative;
+      max-width: 1200px;
+      aspect-ratio: 1600 / 300; /* Maintain aspect ratio */
+      height: auto;
+      margin: 15px auto;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(2, 70, 59, 0.272);
+    }
+    @media (max-width: 600px) {
+      .banner-slider {
+        max-width: 360px; /* Smaller width on mobile */
+        height: auto;
+      }
+    }
+    .banner-track {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s ease-in-out; /* Smooth transition for slides */
+    }
+    .banner-slider .slide {
+      min-width: 100%; /* Each slide takes full width */
+      height: 100%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .banner-slider img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Cover the slide area */
+    }
+    @media (max-width: 360px) {
+      .banner-slider {
+        height: auto; /* Adjust height on smaller devices */
+      }
+      .promo-poster h2 {
+        font-size: 1.3rem; /* Adjust font size */
+      }
+      .promo-poster p {
+        font-size: 1rem; /* Adjust font size */
+      }
+    }
+    /* Styles for promotional slides */
+    .slide.promo {
+      background: linear-gradient(135deg, #27aeae, #1e877c); /* Gradient background for promo */
+      color: rgb(255, 255, 255);
+      font-size: 1rem;
+      font-weight: bold;
+      height: 100%;
+      text-align: center;
+      align-items: center;
+      justify-content: left;
+      padding: 20px;
+    }
+    .promo-content {
+      max-width: 600px;
+      margin: 0 72px;
+      padding: 0 20px;
+    }
+    @media (max-width: 600px) {
+      .slide.promo {
+        max-width: 360px; /* Smaller width on mobile */
+        height: 30px;
+      }
+    }
+    .promo-poster {
+      max-width: 600px;
+      padding: 20px;
+      left: -10px;
+    }
+    .promo-poster h2 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      animation: bounce 1.2s infinite; /* Bouncing animation */
+    }
+    .promo-poster p {
+      font-size: 1.2rem;
+      margin: 8px 0;
+    }
+    .promo-poster .harga {
+      font-size: 1.6rem;
+      font-weight: bold;
+      background: rgba(255,255,255,0.2);
+      padding: 6px 12px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+    .promo-poster .cta {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background: white;
+      color: #ff4b2b; /* Call-to-action button color */
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: 0.3s; /* Transition for button */
+    }
+    .promo-poster .cta:hover {
+      background: #ffecec; /* Change background on hover */
+      transform: scale(1.05); /* Scale effect on hover */
+    }
+    /* Bounce animation keyframes */
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
   </style>
 </head>
 <body>
   <header>
     <h1>QHub</h1>
-    <!-- 🔹 Tambah di dalam <header> -->
+    <!-- Sidebar toggle button -->
     <button id="sidebarToggle" class="sidebar-btn" aria-label="Toggle Sidebar">
       ☰
     </button>
   </header>
-  
-  <!-- 🔹 Sidebar HTML -->
+  <!-- Sidebar HTML -->
   <div id="sidebar" class="sidebar">
     <h2>Menu</h2>
     <a href="index.html">Home</a>
     <a id="promoLink" href="promo.html">Input Promo</a>
     <a href="login.html">Login</a>
   </div>
-
   <!-- Banner Slider -->
-<div class="banner-slider">
-  <div class="banner-track" id="bannerTrack">
-    <!-- Banner Poster Tetap -->
-    <div class="slide">
-      <img src="images/banner-pos1.png" alt="Poster 1">
-    </div>
-    <div class="slide">
-      <img src="images/banner-pos1.png" alt="Poster 1">
+  <div class="banner-slider">
+    <div class="banner-track" id="bannerTrack">
+      <!-- Banner images -->
+      <div class="slide">
+        <img src="images/banner-pos1.png" alt="Poster 1">
+      </div>
+      <div class="slide">
+        <img src="images/banner.png" alt="Poster 1">
+      </div>
     </div>
   </div>
-</div>
-
-
-<!-- tombol navigasi -->
-
-  <!-- <div class="card-placeholder"></div> -->
+  <!-- Product Container -->
   <div id="products" class="container"></div>
-
-  <!-- Modal -->
+  <!-- Modal for product details -->
   <div id="productModal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
@@ -556,24 +492,20 @@ canvas#doodleBg {
       </div>
       <p style="text-align: left;" id="modalDesc"></p>
       <div class="modal-body">
-        <select id="modalCat"></select>
-        <select id="modalDur"></select>
+        <select id="modalCat"></select> <!-- Category selection -->
+        <select id="modalDur"></select> <!-- Duration selection -->
         <div style="color: #333; margin-bottom: 5%; margin-top: 5%; text-align: center;" id="modalHarga" class="harga">Pilih kategori & durasi</div>
-        <button id="modalBuyBtn">Cek Stok</button>
+        <button id="modalBuyBtn">Cek Stok</button> <!-- Check stock button -->
       </div>
     </div>
   </div>
-
   <script type="module">
+    // Import Supabase client
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
-
-    const SUPABASE_URL = 'https://uagbiwhyapkrxkyyjeza.supabase.co';
-    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhZ2Jpd2h5YXBrcnhreXlqZXphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0NDUyNjcsImV4cCI6MjA2OTAyMTI2N30.k6dR0RL0yfElQC5wWKC2ab5npBSiLwaCecxq6j2fdWE';
-    
-    // const WA_NUMBER = '6285722444031';
-
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
-
+    const SUPABASE_URL = 'https://uagbiwhyapkrxkyyjeza.supabase.co'; // Supabase URL
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhZ2Jpd2h5YXBrcnhreXlqZXphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0NDUyNjcsImV4cCI6MjA2OTAyMTI2N30.k6dR0RL0yfElQC5wWKC2ab5npBSiLwaCecxq6j2fdWE'; // Supabase anon key
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON); // Create Supabase client
+    // Modal elements
     const modal = document.getElementById('productModal');
     const modalTitle = document.getElementById('modalTitle');
     const modalDesc = document.getElementById('modalDesc');
@@ -582,391 +514,344 @@ canvas#doodleBg {
     const modalHarga = document.getElementById('modalHarga');
     const modalBuyBtn = document.getElementById('modalBuyBtn');
     const closeModal = document.getElementById('closeModal');
-
+    // Function to load banners
     async function loadBanners() {
       const track = document.getElementById("bannerTrack");
     }
-
-
-// --- Auto Slider ---
-let slideIndex = 0;
-function showSlide(n) {
-  const track = document.getElementById("bannerTrack");
-  const slides = document.querySelectorAll(".banner-track .slide");
-  if (!slides.length) return;
-  slideIndex = (n + slides.length) % slides.length;
-  track.style.transform = `translateX(-${slideIndex * 100}%)`;
-}
-
-function autoSlide() {
-  showSlide(slideIndex + 1);
-}
-
-setInterval(autoSlide, 5000); // ganti tiap 5 detik
-
-// Init
-loadBanners().then(() => showSlide(0));
-
-
-
+    // --- Auto Slider ---
+    let slideIndex = 0; // Current slide index
+    function showSlide(n) {
+      const track = document.getElementById("bannerTrack");
+      const slides = document.querySelectorAll(".banner-track .slide");
+      if (!slides.length) return; // Exit if no slides
+      slideIndex = (n + slides.length) % slides.length; // Update slide index
+      track.style.transform = `translateX(-${slideIndex * 100}%)`; // Move track to show current slide
+    }
+    function autoSlide() {
+      showSlide(slideIndex + 1); // Show the next slide
+    }
+    setInterval(autoSlide, 5000); // Change slide every 5 seconds
+    // Load banners and show the first slide
+    loadBanners().then(() => showSlide(0));
+    // Close modal when clicking the close button
     closeModal.onclick = () => modal.style.display = 'none';
+    // Close modal when clicking outside of it
     window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
-
+    // Function to load products from Supabase
     async function load() {
-  const { data, error } = await supabase
-  .from('products')
-  .select(`
-    nama_produk,
-    kategori,
-    durasi,
-    harga_modal,
-    keuntungan,
-    promo (
-      harga_modal_promo,
-      aktif,
-      tanggal_mulai,
-      tanggal_berakhir
-    )
-  `)
-  .order('nama_produk', { ascending: true });
-
-  if (error) {
-    console.error(error);
-    document.getElementById('products').innerText = 'Gagal memuat produk';
-    return;
-  }
-
-  const productImages = {
-    'Alight Motion': '../images/am.png',
-    'Bstation': '../images/bs.png',
-    'Capcut': '../images/cc.png',
-    'Canva': '../images/c.png',
-    'Netflix': '../images/n.png',
-    'Spotify': '../images/s.png',
-    'YouTube': '../images/yt.png',
-    'ChatGPT': '../images/gpt.png',
-    'iQIYI': '../images/iq.png',
-    'Vidio': '../images/vid.png'
-  };
-
-  const grouped = {};
-  data.forEach(p => {
-    if (!grouped[p.nama_produk]) grouped[p.nama_produk] = [];
-    grouped[p.nama_produk].push(p);
-  });
-
-  const container = document.getElementById('products');
-  container.innerHTML = '';
-
-  Object.keys(grouped).forEach((nama_produk, index) => {
-  const group = grouped[nama_produk];
-
-  // buat card
-  const card = document.createElement('div');
-  card.className = 'card fade';
-
-  // header
-  const header = document.createElement('div');
-  header.className = 'card-header';
-
-  // 🔹 cek apakah ada promo aktif
-  let adaPromo = group.some(p => {
-    if (!p.promo || p.promo.length === 0) return false;
-    const pr = p.promo[0];
-    const now = new Date();
-    const mulai = pr.tanggal_mulai ? new Date(pr.tanggal_mulai) : null;
-    const akhir = pr.tanggal_berakhir ? new Date(pr.tanggal_berakhir) : null;
-    return pr.aktif && (!mulai || mulai <= now) && (!akhir || akhir >= now);
-  });
-
-  // 🔹 kasih label "Promo"
-  if (adaPromo) {
-    const badge = document.createElement('span');
-    badge.textContent = 'Promo';
-    badge.style.position = 'absolute';
-    badge.style.top = '10px';
-    badge.style.left = '10px';
-    badge.style.background = '#e74c3c';
-    badge.style.color = 'white';
-    badge.style.fontSize = '0.8rem';
-    badge.style.fontWeight = 'bold';
-    badge.style.padding = '4px 8px';
-    badge.style.borderRadius = '8px';
-    badge.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
-    header.appendChild(badge);
-  }
-
-    // title
-    const title = document.createElement('div');
-    title.className = 'card-title';
-    title.textContent = nama_produk;
-    card.appendChild(title);
-
-    container.appendChild(card);
-
-    // delay tiap card beda-beda
-    setTimeout(() => {
-  const img = new Image();
-  img.src = productImages[nama_produk] + '?t=' + Date.now();
-  img.alt = nama_produk;
-  img.classList.add('fade');
-
-  img.onload = () => {
-    header.innerHTML = '';
-    header.appendChild(img);
-
-    // 🔹 cek promo & tempel badge setelah gambar ada
-    let adaPromo = group.some(p => {
-      if (!p.promo || p.promo.length === 0) return false;
-      const pr = p.promo[0];
-      const now = new Date();
-      const mulai = pr.tanggal_mulai ? new Date(pr.tanggal_mulai) : null;
-      const akhir = pr.tanggal_berakhir ? new Date(pr.tanggal_berakhir) : null;
-      return pr.aktif && (!mulai || mulai <= now) && (!akhir || akhir >= now);
-    });
-
-    if (adaPromo) {
-      const badge = document.createElement('span');
-      badge.textContent = 'Promo';
-      badge.style.position = 'absolute';
-      badge.style.top = '10px';
-      badge.style.left = '10px';
-      badge.style.background = '#e74c3c';
-      badge.style.color = 'white';
-      badge.style.fontSize = '0.8rem';
-      badge.style.fontWeight = 'bold';
-      badge.style.padding = '4px 8px';
-      badge.style.borderRadius = '8px';
-      badge.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
-      header.appendChild(badge);
-    }
-
-    // dua rAF biar pasti ter-render
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        img.classList.add('show');
-        card.classList.add('show'); 
-      });
-    });
-  };
-}, index * 300);
-
-
-
-    // Klik buka modal
-    header.addEventListener('click', () => {
-      modal.style.display = 'flex';
-      modalTitle.textContent = nama_produk;
-      modalDesc.textContent = group[0].description || 'Silakan pilih kategori dan durasi untuk melihat harga. Anda akan dialihkan ke WhatsApp untuk menanyakan ketersediaan stok dan melakukan pembelian.';
-
-      // Filter kategori unik
-      const cats = [...new Set(group.map(x => x.kategori))];
-        modalCat.innerHTML = `<option value="" selected disabled>Pilih kategori</option>` + 
-          cats.map(c => `<option value="${c}">${c}</option>`).join('');
-
-      function updateDurasi() {
-        const cat = modalCat.value;
-        const durasi = group
-          .filter(x => x.kategori === cat)
-          .map(x => x.device ? `${x.durasi} (${x.device})` : x.durasi);
-
-        modalDur.innerHTML = `<option value="" selected disabled>Pilih durasi</option>` + 
-          durasi.map(d => `<option value="${d}">${d}</option>`).join('');
-
-        updateHarga();
+      const { data, error } = await supabase
+      .from('products') // Fetch data from 'products' table
+      .select(`
+        nama_produk,
+        kategori,
+        durasi,
+        harga_modal,
+        keuntungan,
+        promo (
+          harga_modal_promo,
+          aktif,
+          tanggal_mulai,
+          tanggal_berakhir
+        )
+      `)
+      .order('nama_produk', { ascending: true }); // Order by product name
+      if (error) {
+        console.error(error);
+        document.getElementById('products').innerText = 'Gagal memuat produk'; // Error message
+        return;
       }
-function updateHarga() {
-  const cat = modalCat.value;
-  const dur = modalDur.value;
-  const item = group.find(x =>
-    x.kategori === cat &&
-    (x.device ? `${x.durasi} (${x.device})` : x.durasi) === dur
-  );
-  if (!item) {
-    modalHarga.textContent = 'Pilih kategori & durasi';
-    return;
-  }
-  // Normal price calculation
-  const hargaNormal = (item.harga_modal ?? 0) + (item.keuntungan ?? 0);
-  let hargaFinal = hargaNormal; // Start with the normal price
-  // Check all promotions for the selected item
-  if (item.promo && item.promo.length > 0) {
-    const now = new Date();
-    
-    // Filter active promotions for the same product, category, and duration
-    const activePromos = item.promo.filter(pr => { pr.kategori
-      const mulai = pr.tanggal_mulai ? new Date(pr.tanggal_mulai) : null;
-      const akhir = pr.tanggal_berakhir ? new Date(pr.tanggal_berakhir) : null;
-      // Check if the promotion is active
-      return pr.aktif && (!mulai || mulai <= now) && (!akhir || akhir >= now);
-    });
-    // If there are active promotions, find the latest one
-    if (activePromos.length > 0) {
-      // Sort promotions by start date (latest first)
-      activePromos.sort((a, b) => new Date(b.tanggal_mulai) - new Date(a.tanggal_mulai));
-      // Take the latest active promotion
-      const latestPromo = activePromos[0];
-      hargaFinal = (latestPromo.harga_modal_promo ?? item.harga_modal) + (item.keuntungan ?? 0);
-    }
-  }
-  item.hargaFinal = hargaFinal; // Save the final price in the item
-  // Display the price
-  if (hargaFinal < hargaNormal) {
-    modalHarga.innerHTML = `
-      <span style="text-decoration: line-through; color: grey; margin-right: 8px;">
-        Rp ${Number(hargaNormal).toLocaleString('id-ID')}
-      </span>
-      <span style="color: red; font-weight: bold;">
-        Rp ${Number(hargaFinal).toLocaleString('id-ID')}
-      </span>
-    `;
-  } else {
-    modalHarga.textContent = 'Rp ' + Number(hargaFinal).toLocaleString('id-ID');
-  }
-}
-
-        modalCat.onchange = updateDurasi;
-        modalDur.onchange = updateHarga;
-
-        modalBuyBtn.onclick = () => {
-          const cat = modalCat.value;
-          const dur = modalDur.value;
-          const item = group.find(x =>
-            x.kategori === cat &&
-            (x.device ? `${x.durasi} (${x.device})` : x.durasi) === dur
-          );
-          if (!item) return alert('Pilih opsi dulu');
-          const message = `Halo, saya mau pesan ${item.nama_produk} ${item.kategori} ${item.durasi} Harga Rp ${Number(item.hargaFinal).toLocaleString('id-ID')} apakah stock masih ada?`;
-          window.open(`https://wa.me/6285722444031?text=${encodeURIComponent(message)}`, '_blank'); //nomor 6285722444031 sementara nonaktif
-        };
-
-        updateDurasi();
+      // Product images mapping
+      const productImages = {
+        'Alight Motion': '../images/am.png',
+        'Bstation': '../images/bs.png',
+        'Capcut': '../images/cc.png',
+        'Canva': '../images/c.png',
+        'Netflix': '../images/n.png',
+        'Spotify': '../images/s.png',
+        'YouTube': '../images/yt.png',
+        'ChatGPT': '../images/gpt.png',
+        'iQIYI': '../images/iq.png',
+        'Vidio': '../images/vid.png'
+      };
+      const grouped = {}; // Group products by name
+      data.forEach(p => {
+        if (!grouped[p.nama_produk]) grouped[p.nama_produk] = [];
+        grouped[p.nama_produk].push(p);
       });
-
-      card.appendChild(header);
-      card.appendChild(title);
-      container.appendChild(card);
-    });
-  }
-
-      load();
-      loadBanners();
-
-      const canvas = document.getElementById('doodleBg');
-  const ctx = canvas.getContext('2d');
-
-  let doodles = [];
-  const count = 60;
-
-  function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-
-  function createDoodles() {
-    doodles = [];
-    for(let i = 0; i < count; i++) {
-      doodles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: 5 + Math.random() * 12,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        type: Math.random() < 0.5 ? 'circle' : 'cross',
-        opacity: 0.8 + Math.random() * 0.3
+      const container = document.getElementById('products');
+      container.innerHTML = ''; // Clear existing products
+      Object.keys(grouped).forEach((nama_produk, index) => {
+        const group = grouped[nama_produk];
+        // Create product card
+        const card = document.createElement('div');
+        card.className = 'card fade'; // Add fade class for animation
+        // Card header
+        const header = document.createElement('div');
+        header.className = 'card-header';
+        // Check for active promo
+        let adaPromo = group.some(p => {
+          if (!p.promo || p.promo.length === 0) return false;
+          const pr = p.promo[0];
+          const now = new Date();
+          const mulai = pr.tanggal_mulai ? new Date(pr.tanggal_mulai) : null;
+          const akhir = pr.tanggal_berakhir ? new Date(pr.tanggal_berakhir) : null;
+          return pr.aktif && (!mulai || mulai <= now) && (!akhir || akhir >= now);
+        });
+        // Add "Promo" badge if applicable
+        if (adaPromo) {
+          const badge = document.createElement('span');
+          badge.textContent = 'Promo';
+          badge.style.position = 'absolute';
+          badge.style.top = '10px';
+          badge.style.left = '10px';
+          badge.style.background = '#e74c3c'; // Badge background color
+          badge.style.color = 'white'; // Badge text color
+          badge.style.fontSize = '0.8rem';
+          badge.style.fontWeight = 'bold';
+          badge.style.padding = '4px 8px';
+          badge.style.borderRadius = '8px';
+          badge.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
+          header.appendChild(badge); // Append badge to header
+        }
+        // Create title for the card
+        const title = document.createElement('div');
+        title.className = 'card-title';
+        title.textContent = nama_produk; // Set product name
+        card.appendChild(title);
+        container.appendChild(card); // Add card to container
+        // Delay image loading for each card
+        setTimeout(() => {
+          const img = new Image();
+          img.src = productImages[nama_produk] + '?t=' + Date.now(); // Load image with cache-busting
+          img.alt = nama_produk; // Set alt text
+          img.classList.add('fade'); // Add fade class for animation
+          img.onload = () => {
+            header.innerHTML = ''; // Clear header
+            header.appendChild(img); // Add image to header
+            // Check for promo and add badge if applicable
+            let adaPromo = group.some(p => {
+              if (!p.promo || p.promo.length === 0) return false;
+              const pr = p.promo[0];
+              const now = new Date();
+              const mulai = pr.tanggal_mulai ? new Date(pr.tanggal_mulai) : null;
+              const akhir = pr.tanggal_berakhir ? new Date(pr.tanggal_berakhir) : null;
+              return pr.aktif && (!mulai || mulai <= now) && (!akhir || akhir >= now);
+            });
+            if (adaPromo) {
+              const badge = document.createElement('span');
+              badge.textContent = 'Promo';
+              badge.style.position = 'absolute';
+              badge.style.top = '10px';
+              badge.style.left = '10px';
+              badge.style.background = '#e74c3c';
+              badge.style.color = 'white';
+              badge.style.fontSize = '0.8rem';
+              badge.style.fontWeight = 'bold';
+              badge.style.padding = '4px 8px';
+              badge.style.borderRadius = '8px';
+              badge.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
+              header.appendChild(badge); // Append badge to header
+            }
+            // Trigger reflow for animation
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                img.classList.add('show'); // Show image with animation
+                card.classList.add('show'); // Show card with animation
+              });
+            });
+          };
+        }, index * 300); // Delay for each card
+        // Open modal on card click
+        header.addEventListener('click', () => {
+          modal.style.display = 'flex'; // Show modal
+          modalTitle.textContent = nama_produk; // Set modal title
+          modalDesc.textContent = group[0].description || 'Silakan pilih kategori dan durasi untuk melihat harga. Anda akan dialihkan ke WhatsApp untuk menanyakan ketersediaan stok dan melakukan pembelian.'; // Set modal description
+          // Filter unique categories
+          const cats = [...new Set(group.map(x => x.kategori))];
+          modalCat.innerHTML = `<option value="" selected disabled>Pilih kategori</option>` + 
+            cats.map(c => `<option value="${c}">${c}</option>`).join(''); // Populate category dropdown
+          // Function to update duration options based on selected category
+          function updateDurasi() {
+            const cat = modalCat.value; // Get selected category
+            const durasi = group
+              .filter(x => x.kategori === cat)
+              .map(x => x.device ? `${x.durasi} (${x.device})` : x.durasi); // Get durations for selected category
+            modalDur.innerHTML = `<option value="" selected disabled>Pilih durasi</option>` + 
+              durasi.map(d => `<option value="${d}">${d}</option>`).join(''); // Populate duration dropdown
+            updateHarga(); // Update price
+          }
+          // Function to update price based on selected category and duration
+          function updateHarga() {
+            const cat = modalCat.value; // Get selected category
+            const dur = modalDur.value; // Get selected duration
+            const item = group.find(x =>
+              x.kategori === cat &&
+              (x.device ? `${x.durasi} (${x.device})` : x.durasi) === dur
+            ); // Find the selected item
+            if (!item) {
+              modalHarga.textContent = 'Pilih kategori & durasi'; // Prompt user to select options
+              return;
+            }
+            // Normal price calculation
+            const hargaNormal = (item.harga_modal ?? 0) + (item.keuntungan ?? 0); // Calculate normal price
+            let hargaFinal = hargaNormal; // Start with the normal price
+            
+            // Check for active promotions
+            if (item.promo && item.promo.length > 0) {
+              const now = new Date();
+              // Filter active promotions
+              const activePromos = item.promo.filter(pr => {
+                const mulai = pr.tanggal_mulai ? new Date(pr.tanggal_mulai) : null;
+                const akhir = pr.tanggal_berakhir ? new Date(pr.tanggal_berakhir) : null;
+                return pr.aktif && (!mulai || mulai <= now) && (!akhir || akhir >= now); // Check if promo is active
+              });
+              // If there are active promotions, find the latest one
+              if (activePromos.length > 0) {
+                // Sort promotions by start date (latest first)
+                activePromos.sort((a, b) => new Date(b.tanggal_mulai) - new Date(a.tanggal_mulai));
+                // Take the latest active promotion
+                const latestPromo = activePromos[0];
+                hargaFinal = (latestPromo.harga_modal_promo ?? item.harga_modal) + (item.keuntungan ?? 0); // Calculate final price
+              }
+            }
+            item.hargaFinal = hargaFinal; // Save final price in item
+            // Display the price
+            if (hargaFinal < hargaNormal) {
+              modalHarga.innerHTML = `
+                <span style="text-decoration: line-through; color: grey; margin-right: 8px;">
+                  Rp ${Number(hargaNormal).toLocaleString('id-ID')}
+                </span>
+                <span style="color: red; font-weight: bold;">
+                  Rp ${Number(hargaFinal).toLocaleString('id-ID')}
+                </span>
+              `; // Show discounted price
+            } else {
+              modalHarga.textContent = 'Rp ' + Number(hargaFinal).toLocaleString('id-ID'); // Show normal price
+            }
+          }
+          // Event listeners for dropdown changes
+          modalCat.onchange = updateDurasi; // Update duration on category change
+          modalDur.onchange = updateHarga; // Update price on duration change
+          // Event listener for the buy button
+          modalBuyBtn.onclick = () => {
+            const cat = modalCat.value; // Get selected category
+            const dur = modalDur.value; // Get selected duration
+            const item = group.find(x =>
+              x.kategori === cat &&
+              (x.device ? `${x.durasi} (${x.device})` : x.durasi) === dur
+            ); // Find the selected item
+            if (!item) return alert('Pilih opsi dulu'); // Alert if no option is selected
+            const message = `Halo, saya mau pesan *${item.nama_produk} ${item.kategori} ${item.durasi}* *Harga Rp ${Number(item.hargaFinal).toLocaleString('id-ID')}* apakah stock masih ada?`; // Create WhatsApp message
+            window.open(`https://wa.me/6285722444031?text=${encodeURIComponent(message)}`, '_blank'); // Open WhatsApp with the message
+          };
+          updateDurasi(); // Initialize duration options
+        });
+        
+        // Append header and title to the card
+        card.appendChild(header);
+        card.appendChild(title);
+        container.appendChild(card); // Add card to container
       });
     }
-  }
-
-  function drawDoodle(d) {
-    ctx.strokeStyle = `rgba(163, 217, 165, ${d.opacity})`;
-    ctx.lineWidth = 1;
-
-    if (d.type === 'circle') {
-      ctx.beginPath();
-      ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-      ctx.stroke();
-    } else {
-      ctx.beginPath();
-      ctx.moveTo(d.x - d.r, d.y - d.r);
-      ctx.lineTo(d.x + d.r, d.y + d.r);
-      ctx.moveTo(d.x + d.r, d.y - d.r);
-      ctx.lineTo(d.x - d.r, d.y + d.r);
-      ctx.stroke();
+    load(); // Load products
+    loadBanners(); // Load banners
+    // Doodle background animation
+    const canvas = document.getElementById('doodleBg');
+    const ctx = canvas.getContext('2d');
+    let doodles = [];
+    const count = 60; // Number of doodles
+    function resize() {
+      canvas.width = window.innerWidth; // Set canvas width
+      canvas.height = window.innerHeight; // Set canvas height
     }
-  }
-
-  function update() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    doodles.forEach(d => {
-      d.x += d.vx;
-      d.y += d.vy;
-
-      // kalau nyampe tepi, pantulkan
-      if (d.x < 0 || d.x > canvas.width) d.vx *= -1;
-      if (d.y < 0 || d.y > canvas.height) d.vy *= -1;
-
-      drawDoodle(d);
-    });
-
-    requestAnimationFrame(update);
-  }
-
-  function initDoodle() {
-    resize();
-    createDoodles();
-    update();
-  }
-
-  window.addEventListener('resize', () => {
-    resize();
-    createDoodles();
-  });
-
-  initDoodle();
-
-  // 🔹 JS toggle sidebar
-  const sidebar = document.getElementById('sidebar');
-  const sidebarToggle = document.getElementById('sidebarToggle');
-
-  sidebarToggle.addEventListener('click', () => {
-    sidebar.classList.toggle('active');
-  });
-
-  // Klik di luar sidebar untuk nutup
-  window.addEventListener('click', (e) => {
-    if (sidebar.classList.contains('active') && !sidebar.contains(e.target) && e.target !== sidebarToggle) {
-      sidebar.classList.remove('active');
+    function createDoodles() {
+      doodles = [];
+      for(let i = 0; i < count; i++) {
+        doodles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: 5 + Math.random() * 12, // Random radius
+          vx: (Math.random() - 0.5) * 0.3, // Random x velocity
+          vy: (Math.random() - 0.5) * 0.3, // Random y velocity
+          type: Math.random() < 0.5 ? 'circle' : 'cross', // Random shape
+          opacity: 0.8 + Math.random() * 0.3 // Random opacity
+        });
+      }
     }
-  });
-
-  // 🔹 Klik menu sidebar untuk nutup otomatis
-  document.querySelectorAll('#sidebar a').forEach(link => {
-    link.addEventListener('click', () => {
-      sidebar.classList.remove('active');
+    function drawDoodle(d) {
+      ctx.strokeStyle = `rgba(163, 217, 165, ${d.opacity})`; // Doodle color
+      ctx.lineWidth = 1;
+      if (d.type === 'circle') {
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2); // Draw circle
+        ctx.stroke();
+      } else {
+        ctx.beginPath();
+        ctx.moveTo(d.x - d.r, d.y - d.r);
+        ctx.lineTo(d.x + d.r, d.y + d.r); // Draw cross
+        ctx.moveTo(d.x + d.r, d.y - d.r);
+        ctx.lineTo(d.x - d.r, d.y + d.r);
+        ctx.stroke();
+      }
+    }
+    function update() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+      doodles.forEach(d => {
+        d.x += d.vx; // Update x position
+        d.y += d.vy; // Update y position
+        // Bounce off edges
+        if (d.x < 0 || d.x > canvas.width) d.vx *= -1; // Bounce horizontally
+        if (d.y < 0 || d.y > canvas.height) d.vy *= -1; // Bounce vertically
+        drawDoodle(d); // Draw doodle
+      });
+      requestAnimationFrame(update); // Request next animation frame
+    }
+    function initDoodle() {
+      resize(); // Resize canvas
+      createDoodles(); // Create doodles
+      update(); // Start animation
+    }
+    // Resize and create doodles on window resize
+    window.addEventListener('resize', () => {
+      resize();
+      createDoodles();
     });
-  });
-
-  const role = localStorage.getItem('role'); // 'admin' atau 'user'
-
-  // Kalau belum login atau bukan admin, sembunyikan link Input Promo
-  if (role !== 'admin') {
-    document.getElementById('promoLink').style.display = 'none';
-  }
-  
+    initDoodle(); // Initialize doodle animation
+    // Sidebar toggle functionality
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('active'); // Toggle sidebar visibility
+    });
+    // Close sidebar when clicking outside
+    window.addEventListener('click', (e) => {
+      if (sidebar.classList.contains('active') && !sidebar.contains(e.target) && e.target !== sidebarToggle) {
+        sidebar.classList.remove('active'); // Remove active class
+      }
+    });
+    // Close sidebar when clicking a menu link
+    document.querySelectorAll('#sidebar a').forEach(link => {
+      link.addEventListener('click', () => {
+        sidebar.classList.remove('active'); // Remove active class
+      });
+    });
+    const role = localStorage.getItem('role'); // Get user role from local storage
+    // Hide Input Promo link if user is not admin
+    if (role !== 'admin') {
+      document.getElementById('promoLink').style.display = 'none'; // Hide promo link
+    }
   </script>
+  <!-- Footer -->
   <footer>
-  <div class="footer-container">
-    <p>&copy; 2025 QudalauttHub. All rights reserved.</p>
-    <div class="footer-links">
-      <a href="https://www.instagram.com/qudalautt.hub?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="><i class="fa-brands fa-instagram"></i></a>
-      <a href="https://wa.me/6285722444031"><i class="fa-brands fa-whatsapp"></i></a>
-      <a href="tokoquda.vercel.app"><i class="fa-solid fa-earth-asia"></i></a>
+    <div class="footer-container">
+      <p>&copy; 2025 QudalauttHub. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="https://www.instagram.com/qudalautt.hub?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://wa.me/6285722444031"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="tokoquda.vercel.app"><i class="fa-solid fa-earth-asia"></i></a>
+      </div>
     </div>
-  </div>
-</footer>
-<canvas id="doodleBg"></canvas>
-
+  </footer>
+  <canvas id="doodleBg"></canvas> <!-- Canvas for doodle background -->
 </body>
 </html>
