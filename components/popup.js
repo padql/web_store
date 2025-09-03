@@ -4,7 +4,7 @@
   toast.innerHTML = `
     <button class="close" aria-label="Tutup">×</button>
     <h4>🎉 Diskon Spesial!</h4>
-    <p><b>Potongan Rp. 5000</b><br />khusus <b>pembelian ke-3</b> kamu!</p>
+    <p><b>Potongan Rp. 5000</b><br />khusus <b>Pembelian ke-3</b> kamu!</p>
   `;
   document.addEventListener("DOMContentLoaded", () => {
     document.body.appendChild(toast);
@@ -22,7 +22,7 @@
   toast.querySelector(".close").addEventListener("click", hide);
 
   // muncul otomatis tiap buka/refresh
-  window.addEventListener("load", () => {
-    setTimeout(show, 800);
+  globalThis.addEventListener("load", () => {
+    setTimeout(show, 3000);
   });
 })();
