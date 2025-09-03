@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poster</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.cdnfonts.com/css/wtf-bokytime" rel="stylesheet">
+  <style>
+    body {
+      font-family: poppins, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #27aeae; /* Header background color */
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+    header h1 {
+      font-family: 'WTF Bokytime', sans-serif; /* Custom font for header */
+      margin: 0;
+      font-size: 1.9rem;
+      color: #02443d; /* Header text color */
+      text-align: left;
+    }
+    /* Sidebar button styles */
+    .sidebar-btn {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #02443d;
+      font-size: 1.6rem;
+      cursor: pointer;
+      width: 45px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .sidebar-btn:hover {
+      color: #04ffe6; /* Hover effect for sidebar button */
+    }
+    /* Sidebar styles */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -100%; /* Initially hidden off-screen */
+      width: 250px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(8px);
+      border-right: 1px solid rgba(0,0,0,0.1);
+      padding: 20px;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+      transition: left 0.3s ease; /* Smooth transition for sidebar */
+      z-index: 2000;
+    }
+    .sidebar.active {
+      left: 0; /* Show sidebar when active */
+    }
+    .sidebar h2 {
+      color: #1e877c; /* Sidebar title color */
+      margin-bottom: 20px;
+    }
+    .sidebar a {
+      display: block;
+      padding: 10px 0;
+      color: #333;
+      text-decoration: none;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    .sidebar a:hover {
+      color: #1e877c; /* Hover effect for sidebar links */
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      margin: 0;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+    }
+
+    .poster-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      width: 100%;
+    }
+
+    .poster {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .poster:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .poster img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .poster-title {
+      color: black;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    /* Popup / Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+      transition: transform 0.3s ease;
+      cursor: zoom-in;
+    }
+
+    .lightbox:target {
+      display: flex;
+    }
+
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: white;
+      font-size: 30px;
+      font-weight: bold;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    footer {
+      background: #27aeae; /* Footer background color */
+      color: #02443d; /* Footer text color */
+      padding: 20px 0;
+      margin-top: 40px;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+    .footer-container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      color: #02443d;
+      text-decoration: none;
+      transition: color 0.3s ease; /* Transition for link color */
+    }
+    .footer-links a:hover {
+      color: #04ffe6; /* Change color on hover */
+      text-decoration: underline; /* Underline on hover */
+    }
+    /* Responsive styles for footer */
+    @media (max-width: 600px) {
+      .footer-container {
+        flex-direction: column;
+        font-size: 0.85rem;
+      }
+      .footer-links {
+        justify-content: center;
+      }
+    }
+    /* Canvas for doodle background */
+    canvas#doodleBg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1; /* Behind all content */
+      pointer-events: none; /* Prevent interaction */
+      background: transparent;
+    }
+  </style>
+</head>
+<body>
+    <header>
+    <h1>QHub</h1>
+    <!-- Sidebar toggle button -->
+    <button id="sidebarToggle" class="sidebar-btn" aria-label="Toggle Sidebar">
+      ☰
+    </button>
+  </header>
+  <!-- Sidebar HTML -->
+  <div id="sidebar" class="sidebar">
+    <h2>Menu</h2>
+    <a href="index.html">Home</a>
+    <a id="promoLink" href="promo.html">Input Promo</a>
+    <a href="poster.html">Poster</a>
+    <a href="login.html">Login</a>
+  </div>
+  <div class="container">
+  <div class="poster-grid">
+    <a href="#img1" class="poster">
+      <img src="images/poster-pos1.jpg" alt="Poster 1">
+      <div class="poster-title">QudalauttHub</div>
+    </a>
+    <a href="#img2" class="poster">
+      <img src="images/poster-full.png" alt="Poster 2">
+      <div class="poster-title">Jasa Pembuatan Web</div>
+    </a>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="img1" class="lightbox">
+    <a href="#" class="close">&times;</a>
+    <img src="images/poster-pos1.jpg" alt="Poster 1">
+  </div>
+
+  <div id="img2" class="lightbox">
+    <a href="#" class="close">&times;</a>
+    <img src="images/poster-full.png" alt="Poster 2">
+  </div>
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('active'); // Toggle sidebar visibility
+    });
+    // Close sidebar when clicking outside
+    window.addEventListener('click', (e) => {
+      if (sidebar.classList.contains('active') && !sidebar.contains(e.target) && e.target !== sidebarToggle) {
+        sidebar.classList.remove('active'); // Remove active class
+      }
+    });
+    // Close sidebar when clicking a menu link
+    document.querySelectorAll('#sidebar a').forEach(link => {
+      link.addEventListener('click', () => {
+        sidebar.classList.remove('active'); // Remove active class
+      });
+    });
+
+    const canvas = document.getElementById('doodleBg');
+    const ctx = canvas.getContext('2d');
+    let doodles = [];
+    const count = 60; // Number of doodles
+    function resize() {
+      canvas.width = window.innerWidth; // Set canvas width
+      canvas.height = window.innerHeight; // Set canvas height
+    }
+    function createDoodles() {
+      doodles = [];
+      for(let i = 0; i < count; i++) {
+        doodles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: 5 + Math.random() * 12, // Random radius
+          vx: (Math.random() - 0.5) * 0.3, // Random x velocity
+          vy: (Math.random() - 0.5) * 0.3, // Random y velocity
+          type: Math.random() < 0.5 ? 'circle' : 'cross', // Random shape
+          opacity: 0.8 + Math.random() * 0.3 // Random opacity
+        });
+      }
+    }
+    function drawDoodle(d) {
+      ctx.strokeStyle = `rgba(163, 217, 165, ${d.opacity})`; // Doodle color
+      ctx.lineWidth = 1;
+      if (d.type === 'circle') {
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2); // Draw circle
+        ctx.stroke();
+      } else {
+        ctx.beginPath();
+        ctx.moveTo(d.x - d.r, d.y - d.r);
+        ctx.lineTo(d.x + d.r, d.y + d.r); // Draw cross
+        ctx.moveTo(d.x + d.r, d.y - d.r);
+        ctx.lineTo(d.x - d.r, d.y + d.r);
+        ctx.stroke();
+      }
+    }
+    function update() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+      doodles.forEach(d => {
+        d.x += d.vx; // Update x position
+        d.y += d.vy; // Update y position
+        // Bounce off edges
+        if (d.x < 0 || d.x > canvas.width) d.vx *= -1; // Bounce horizontally
+        if (d.y < 0 || d.y > canvas.height) d.vy *= -1; // Bounce vertically
+        drawDoodle(d); // Draw doodle
+      });
+      requestAnimationFrame(update); // Request next animation frame
+    }
+    function initDoodle() {
+      resize(); // Resize canvas
+      createDoodles(); // Create doodles
+      update(); // Start animation
+    }
+    // Resize and create doodles on window resize
+    window.addEventListener('resize', () => {
+      resize();
+      createDoodles();
+    });
+    initDoodle();
+  </script>
+  </div>
+  <footer>
+    <div class="footer-container">
+      <p>&copy; 2025 QudalauttHub. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="https://www.instagram.com/qudalautt.hub?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://wa.me/6285722444031"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="tokoquda.vercel.app"><i class="fa-solid fa-earth-asia"></i></a>
+      </div>
+    </div>
+  </footer>
+  <canvas id="doodleBg"></canvas>
+</body>
+</html>
